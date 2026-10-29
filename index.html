@@ -36,7 +36,8 @@ header{display:flex;align-items:center;gap:10px}
 .feel b{font-weight:600;color:var(--feelc,#8d76b0)}
 .feel small{display:block;font-family:var(--body);font-weight:700;font-size:14px;color:#7d768c;margin-top:2px}
 .say{width:40px;height:40px;border-radius:50%;border:0;background:#fffdfa;color:#3a3550;box-shadow:0 2px 0 rgba(58,53,80,.12);display:grid;place-items:center;cursor:pointer;flex:none}
-.mo{flex:1;min-height:0;width:calc(100% - 96px);touch-action:none;display:block}
+.moWrap{flex:1;min-height:0;width:calc(100% - 96px);display:flex;transform-origin:50% 95%;will-change:transform;animation:breathe 4s ease-in-out infinite}
+.mo{width:100%;height:100%;touch-action:manipulation;display:block;overflow:visible}
 .mo.bodymode{cursor:crosshair}
 .swatches{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;padding:8px 6px;background:rgba(255,253,250,.7);border-radius:999px}
 .sw{width:28px;height:28px;border-radius:50%;border:2.5px solid #fffdfa;box-shadow:0 0 0 1.5px rgba(58,53,80,.25);cursor:pointer;padding:0}
@@ -49,10 +50,10 @@ header{display:flex;align-items:center;gap:10px}
 .chip{flex:none;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font-weight:800;font-size:14px;padding:7px 13px;border-radius:999px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .chip.gap{margin-left:10px}
-.tray{display:grid;grid-template-rows:repeat(2,64px);grid-auto-flow:column;grid-auto-columns:calc((100% - 24px) / 5);gap:6px;overflow-x:auto;scrollbar-width:none;flex:none;overscroll-behavior-x:contain}
+.tray{display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:auto;gap:6px;height:134px;overflow-y:auto;align-content:start;scrollbar-width:none;flex:none;overscroll-behavior:contain}
 .tray::-webkit-scrollbar{display:none}
 .trayhint{margin:0;font-size:13px;color:var(--muted);font-weight:700}
-.part{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;display:grid;place-items:center;cursor:grab;touch-action:pan-x;padding:6px;position:relative;color:var(--fg)}
+.part{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;height:64px;box-sizing:border-box;display:grid;place-items:center;cursor:pointer;touch-action:manipulation;padding:6px;position:relative;color:var(--fg)}
 .part.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .part svg{width:100%;height:100%;pointer-events:none}
 .part em{position:absolute;bottom:3px;font-style:normal;font-size:10px;font-weight:800;color:var(--muted)}
@@ -61,14 +62,13 @@ header{display:flex;align-items:center;gap:10px}
 .wide{grid-column:1/-1;font-size:13px;color:var(--muted);font-weight:700;margin:0;align-self:center}
 .size3{grid-column:span 4;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .ghost{position:fixed;width:96px;height:72px;pointer-events:none;z-index:50;transform:translate(-50%,-50%) scale(1.15);filter:drop-shadow(0 6px 8px rgba(0,0,0,.18))}
-.ghost.fly{transition:left .2s ease-in,top .2s ease-in,transform .2s ease-in,opacity .2s}
+.ghost.fly{transition:left .2s ease-in,top .2s ease-in,transform .2s ease-in,opacity .2s ease-in}
 .pop{transform-box:fill-box;transform-origin:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pop{0%{transform:scale(.4)}100%{transform:scale(1)}}
-.mo{transform-origin:50% 95%;animation:breathe 4s ease-in-out infinite;will-change:transform}
 @keyframes breathe{50%{transform:scale(1.015,.99)}}
 .wave{transform-box:fill-box;transform-origin:85% 15%;animation:wave 3.2s ease-in-out infinite}
 @keyframes wave{50%{transform:rotate(-8deg)}}
-.hop .mo{animation:hop .5s ease}
+.hop .moWrap{animation:hop .5s ease}
 @keyframes hop{40%{transform:translateY(-8px) scale(1.02,.98)}}
 .seam{fill:none;stroke-dasharray:6 6;stroke-width:2.2;opacity:.7}
 .guide{fill:none;stroke-dasharray:3 5;stroke-width:2.2;opacity:.4}
@@ -85,7 +85,56 @@ header{display:flex;align-items:center;gap:10px}
 .card p{margin:0;font-size:14px;color:var(--muted);font-weight:700;text-align:center}
 .go{border:0;background:var(--accent);color:#fff;font-weight:800;font-size:17px;padding:14px;border-radius:18px;cursor:pointer}
 .say:focus-visible,.chip:focus-visible,.part:focus-visible,.tool:focus-visible,.sw:focus-visible,.go:focus-visible,.namebtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){.mo,.pop{animation:none}}
+@media (prefers-reduced-motion:reduce){.moWrap,.pop{animation:none}}
+
+.grp{flex:none;align-self:center;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 2px 0 8px}
+.grp:first-child{margin-left:0}
+.iconbtn{border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+.tool.soft{background:#fffdfa;color:#7a5fae;box-shadow:inset 0 0 0 2px #cdbfe6}
+.sheet.bottom{align-items:end;padding-bottom:max(12px,env(safe-area-inset-bottom,0px));background:rgba(29,27,38,.25)}
+.step small{font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.choice{border:1.5px solid var(--line);background:var(--bg);color:var(--fg);border-radius:16px;padding:12px 10px;font-weight:800;font-size:14px;text-align:left;cursor:pointer;line-height:1.2}
+.choice.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);background:var(--surface)}
+.row{display:flex;gap:8px}.row .go{flex:1}
+.go.ghostbtn{background:var(--bg);color:var(--fg);border:1.5px solid var(--line)}
+.suggest{font-family:var(--display);font-weight:600;font-size:26px;text-align:center;margin:4px 0;text-wrap:balance}
+.suggest b{font-weight:600}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:84px 1fr 24px;align-items:center;gap:8px;font-size:13px;font-weight:800}
+.bar i{display:block;height:12px;border-radius:6px}
+.entry{display:grid;grid-template-columns:12px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.entry .dot{width:12px;height:12px;border-radius:50%;margin-top:4px}
+.entry b{font-weight:800}
+.entry span{display:block;color:var(--muted);font-size:12.5px;font-weight:700}
+.tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--bg);color:var(--muted);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+.insight{background:var(--bg);border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;line-height:1.4}
+.insight b{font-weight:800}
+.f-happy .moWrap{animation:bob 1.6s ease-in-out infinite}
+.f-excited .moWrap{animation:bounce .6s ease-in-out infinite}
+.f-proud .moWrap{animation:puff 2.2s ease-in-out infinite}
+.f-calm .moWrap{animation:breathe 5s ease-in-out infinite}
+.f-sad .moWrap{animation:droop 3.5s ease-in-out infinite}
+.f-worried .moWrap{animation:tremble .38s linear infinite}
+.f-nervous .moWrap{animation:tremble .2s linear infinite}
+.f-cross .moWrap{animation:stiff 1.6s linear infinite}
+.f-frustrated .moWrap{animation:stamp 1.2s ease-out infinite}
+.f-surprised .moWrap{animation:jump .7s ease-out 1}
+.f-confused .moWrap{animation:tilt 2.6s ease-in-out infinite}
+.f-tired .moWrap{animation:sway 4s ease-in-out infinite}
+.f-silly .moWrap{animation:wobble .9s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1.02,.98)}50%{transform:translateY(-14px) scale(.98,1.02)}}
+@keyframes puff{0%,100%{transform:scale(1.04)}50%{transform:scale(1.07)}}
+@keyframes droop{0%,100%{transform:translateY(5px) scale(1,.97)}50%{transform:translateY(8px) scale(1,.955)}}
+@keyframes tremble{0%,100%{transform:translateX(0)}25%{transform:translateX(-1.6px) rotate(-.5deg)}75%{transform:translateX(1.6px) rotate(.5deg)}}
+@keyframes stiff{0%,88%,100%{transform:scale(1.03,.98)}92%{transform:scale(1.03,.98) translateX(-3px)}96%{transform:scale(1.03,.98) translateX(3px)}}
+@keyframes stamp{0%,100%{transform:translateY(0)}12%{transform:translateY(-7px)}22%{transform:translateY(0) scale(1.02,.97)}30%{transform:scale(1)}}
+@keyframes jump{30%{transform:translateY(-18px) scale(1.04)}60%{transform:translateY(0)}}
+@keyframes tilt{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(-3deg)}}
+@keyframes sway{0%,100%{transform:rotate(-2.5deg) translateY(3px)}50%{transform:rotate(2.5deg) translateY(3px)}}
+@keyframes wobble{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
 <body>
@@ -96,8 +145,8 @@ header{display:flex;align-items:center;gap:10px}
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/>
       <feDisplacementMap in="SourceGraphic" scale="2.6"/>
     </filter>
-    <filter id="fabric" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="2" result="n"/>
+    <filter id="fabric" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="2" result="n"/>
       <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .16 0" result="a"/>
       <feComposite in="a" in2="SourceAlpha" operator="in" result="t"/>
       <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="t"/></feMerge>
@@ -109,11 +158,12 @@ header{display:flex;align-items:center;gap:10px}
   <header>
     <div class="brand"><small>little easier</small>Feelings</div>
     <button class="namebtn" id="namebtn" aria-label="Change names">Names</button>
+    <button class="iconbtn" id="diarybtn" aria-label="Feelings diary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M10 8h5"/></svg></button>
   </header>
 
   <div class="stage" id="stage">
     <div class="bubble"><div class="feel" id="feel">Give your friend a face</div></div>
-    <svg class="mo" id="mo" viewBox="0 30 300 360" role="img" aria-label="Your manatee friend">
+    <div class="moWrap" id="moWrap"><svg class="mo" id="mo" viewBox="0 30 300 360" role="img" aria-label="Your manatee friend">
       <g filter="url(#hand)" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
         <g id="char">
           <g filter="url(#fabric)">
@@ -143,9 +193,9 @@ header{display:flex;align-items:center;gap:10px}
           <g id="slot-body"></g>
         </g>
       </g>
-    </svg>
+    </svg></div>
     <div class="swatches" id="swatches" role="group" aria-label="Colour"></div>
-    <div class="tools"><button class="tool" id="clear">Start again</button><button class="tool main" id="save">Save feeling</button></div>
+    <div class="tools"><button class="tool soft" id="notsure">Not sure?</button><button class="tool" id="clear">Start again</button><button class="tool main" id="save">Save feeling</button></div>
   </div>
 
   <div class="chips" id="chips" role="group" aria-label="Choose"></div>
@@ -161,6 +211,8 @@ header{display:flex;align-items:center;gap:10px}
     <button class="go" type="submit">Let's go</button>
   </form>
 </div>
+<div class="sheet bottom" id="ns" hidden><div class="card step" id="nsbody"></div></div>
+<div class="sheet" id="diary" hidden><div class="card" id="diarybody"></div></div>
 <div class="sheet" id="cardsheet" hidden>
   <div class="card">
     <img id="cardimg" alt="Feelings card">
@@ -346,24 +398,29 @@ function fit(){
 
 function place(slot,id){
   state[slot]=(state[slot]===id&&PARTS[slot].dress)?null:id;
-  drawSlot(slot,true);save();update();renderTray();fit();
+  drawSlot(slot,true);save();update();markOn();fit();
 }
+function markOn(){document.querySelectorAll("#tray .part:not(.opt)").forEach(b=>b.classList.toggle("on",state[cat]===b.dataset.id))}
 function renderChips(){
-  $("chips").innerHTML=TABS.map(([k,l,g])=>`<button class="chip${g?" gap":""}" aria-pressed="${k===cat}" data-k="${k}">${l}</button>`).join("");
+  const G={eyes:"Face",body:"Body",hats:"Dress up"};
+  $("chips").innerHTML=TABS.map(([k,l])=>`${G[k]?`<span class="grp">${G[k]}</span>`:""}<button class="chip" aria-pressed="${k===cat}" data-k="${k}">${l}</button>`).join("");
 }
+const VBC={};
 function fitThumbs(){
-  document.querySelectorAll("#tray .part:not(.opt) svg").forEach(sv=>{
+  document.querySelectorAll("#tray .part:not(.opt)").forEach(btn=>{
+    const sv=btn.querySelector("svg"),key=cat+":"+btn.dataset.id;
+    if(VBC[key]){sv.setAttribute("viewBox",VBC[key]);return}
     try{const b=sv.querySelector("g").getBBox(),p=4,w=b.width+p*2,h=(b.height+p*2)/.74,vw=Math.max(w,h*1.05);
-      sv.setAttribute("viewBox",`${b.x+b.width/2-vw/2} ${b.y-p} ${vw} ${h}`)}catch(e){}
+      VBC[key]=`${b.x+b.width/2-vw/2} ${b.y-p} ${vw} ${h}`;sv.setAttribute("viewBox",VBC[key])}catch(e){}
   });
 }
 function renderTray(){
   $("mo").classList.toggle("bodymode",cat==="body");
   const t=$("tray"),h=$("trayhint");h.hidden=true;
   if(PARTS[cat]){const P=PARTS[cat];
-    t.innerHTML=P.items.map(p=>`<button class="part${state[cat]===p.id?" on":""}" data-id="${p.id}" aria-label="${p.name}"><svg viewBox="${P.vb}"><g filter="url(#hand)">${p.svg}</g></svg><em>${p.name}</em></button>`).join("");fitThumbs();return}
-  if(cat==="body"){h.hidden=false;h.textContent="Tap on your friend where you feel it. Tap a spot again to take it away.";t.innerHTML=`<button class="part opt" data-bodyclear="1">Clear spots</button>`;return}
-  if(cat==="help"){h.hidden=false;h.textContent="What might help?";t.innerHTML=HELP.map(([k,l,i])=>`<button class="part opt${state.help.includes(k)?" on":""}" data-help="${k}"><svg class="ic" viewBox="-20 -20 40 40"><g filter="url(#hand)" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${i}</g></svg>${l}</button>`).join("");return}
+    t.innerHTML=P.items.map(p=>`<button class="part${state[cat]===p.id?" on":""}" data-id="${p.id}" aria-label="${p.name}"><svg viewBox="${P.vb}"><g>${p.svg}</g></svg><em>${p.name}</em></button>`).join("");fitThumbs();return}
+  if(cat==="body"){t.innerHTML=`<p class="wide">Tap on your friend where you feel it. Tap a spot again to take it away.</p><button class="part opt" data-bodyclear="1">Clear spots</button>`;return}
+  if(cat==="help"){t.innerHTML=`<p class="wide">What might help?</p>`+HELP.map(([k,l,i])=>`<button class="part opt${state.help.includes(k)?" on":""}" data-help="${k}"><svg class="ic" viewBox="-20 -20 40 40"><g stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${i}</g></svg>${l}</button>`).join("");return}
 }
 $("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.k;renderChips();renderTray()});
 $("tray").addEventListener("click",e=>{
@@ -375,38 +432,17 @@ $("tray").addEventListener("click",e=>{
   save();update();renderTray();
 });
 
-/* drag + snap */
-let drag=null;
-$("tray").addEventListener("pointerdown",e=>{
+/* tap to place: the piece flies from its tile to its spot */
+$("tray").addEventListener("click",e=>{
   const b=e.target.closest(".part:not(.opt)");if(!b)return;
-  b.setPointerCapture(e.pointerId);
-  drag={b,id:b.dataset.id,slot:cat,x0:e.clientX,y0:e.clientY,ghost:null};
+  const slot=cat,id=b.dataset.id;
+  if(PARTS[slot].dress&&state[slot]===id){place(slot,id);return}
+  const br=b.getBoundingClientRect(),g=document.createElement("div");g.className="ghost";g.innerHTML=b.querySelector("svg").outerHTML;
+  g.style.left=(br.left+br.width/2)+"px";g.style.top=(br.top+br.height/2)+"px";document.body.appendChild(g);
+  const ctm=$("slot-"+slot).getScreenCTM();
+  requestAnimationFrame(()=>{g.classList.add("fly");g.style.left=ctm.e+"px";g.style.top=ctm.f+"px";g.style.transform="translate(-50%,-50%) scale(.8)";g.style.opacity="0"});
+  setTimeout(()=>{g.remove();place(slot,id)},210);
 });
-$("tray").addEventListener("pointermove",e=>{
-  if(!drag)return;
-  const dx=e.clientX-drag.x0,dy=e.clientY-drag.y0;if(!drag.ghost&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)){drag.moved=true}
-  if(!drag.ghost&&!drag.moved&&Math.abs(dy)>6&&Math.abs(dy)>=Math.abs(dx)){
-    const g=document.createElement("div");g.className="ghost";g.innerHTML=drag.b.querySelector("svg").outerHTML;document.body.appendChild(g);drag.ghost=g;
-  }
-  if(drag.ghost){drag.ghost.style.left=e.clientX+"px";drag.ghost.style.top=e.clientY+"px"}
-});
-$("tray").addEventListener("pointerup",e=>{
-  if(!drag)return;const d=drag;drag=null;
-  if(!d.ghost){if(!d.moved)place(d.slot,d.id);return}
-  const r=$("mo").getBoundingClientRect();
-  const inside=e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom;
-  d.ghost.classList.add("fly");
-  if(inside){
-    const ctm=$("slot-"+d.slot).getScreenCTM();
-    d.ghost.style.left=ctm.e+"px";d.ghost.style.top=ctm.f+"px";d.ghost.style.transform="translate(-50%,-50%) scale(.8)";d.ghost.style.opacity="0";
-    setTimeout(()=>{d.ghost.remove();if(state[d.slot]!==d.id||!PARTS[d.slot].dress)place(d.slot,d.id)},190);
-  }else{
-    const br=d.b.getBoundingClientRect();
-    d.ghost.style.left=(br.left+br.width/2)+"px";d.ghost.style.top=(br.top+br.height/2)+"px";d.ghost.style.opacity="0";
-    setTimeout(()=>d.ghost.remove(),200);
-  }
-});
-$("tray").addEventListener("pointercancel",()=>{if(drag&&drag.ghost)drag.ghost.remove();drag=null});
 
 $("clear").addEventListener("click",()=>{["eyes","brows","mouth"].forEach(k=>{state[k]=null;drawSlot(k)});state.size=1;state.also=null;state.body=[];state.help=[];save();update();renderTray();fit()});
 
@@ -479,6 +515,119 @@ $("closecard").addEventListener("click",()=>$("cardsheet").hidden=true);
 applyColor();Object.keys(PARTS).forEach(k=>drawSlot(k));
 renderChips();renderTray();update();nameBtn();setTimeout(fit,50);
 if(!state.child&&!state.kid)openSheet();
+
+/* ---------- v2: body reactions ---------- */
+const _update=update;
+update=function(){_update();const st=$("stage"),f=feeling();st.className=st.className.replace(/\bf-\w+/g,"").trim();if(f)st.classList.add("f-"+f)};
+
+/* ---------- v2: "I'm not sure" path ---------- */
+const FACE={happy:["happy","soft","smile"],excited:["star","up","grin"],calm:["dots","soft","flat"],proud:["happy","soft","proud"],sad:["teary","worry","frown"],worried:["wide","worry","wobble"],nervous:["wide","worry","nervous"],cross:["dots","cross","grr"],frustrated:["dots","knit","shout"],surprised:["wide","up","oh"],confused:["dots","one","flat"],tired:["sleepy","soft","yawn"],silly:["happy","up","tongue"]};
+const SPOT={tummy:{x:150,y:282},chest:{x:150,y:222},face:{x:150,y:150},head:{x:150,y:72},hands:{x:38,y:242}};
+const SENSE=[
+ ["butterflies","My tummy feels funny","tummy",{nervous:3,excited:2,worried:1}],
+ ["heart","My heart is going fast","chest",{worried:3,nervous:2,excited:1}],
+ ["hot","My face feels hot","face",{cross:3,frustrated:2,nervous:1}],
+ ["heavy","My body feels heavy","chest",{sad:3,tired:2}],
+ ["fizzy","I can't keep still","hands",{excited:3,silly:1,nervous:1}],
+ ["fists","I want to squeeze my hands","hands",{cross:3,frustrated:3}],
+ ["teary","I want to cry","face",{sad:4,frustrated:1}],
+ ["sleepy","I want to sleep","head",{tired:4}],
+ ["busy","I can't think straight","head",{confused:3,worried:2,frustrated:1}],
+ ["light","My body feels still and slow","chest",{calm:3,happy:1}],
+ ["warm","I want to smile","face",{happy:3,proud:2}],
+ ["cant","I don't know",null,{}]];
+const SCENE=[
+ ["new","Something new is happening",{nervous:3,excited:1}],
+ ["change","Plans have changed",{frustrated:2,worried:2,confused:1}],
+ ["no","Someone said no",{cross:3,frustrated:1,sad:1}],
+ ["lost","Something broke or got lost",{sad:3,frustrated:1}],
+ ["waiting","I am waiting",{frustrated:2,tired:1}],
+ ["fun","Something fun is going to happen",{excited:4}],
+ ["did","I did something hard",{proud:5}],
+ ["loud","It is too loud or too busy",{worried:2,cross:2,frustrated:1}],
+ ["alone","I am on my own",{sad:2,calm:1}],
+ ["play","I am playing",{happy:3,silly:2}],
+ ["bed","It is bedtime",{tired:4}],
+ ["dunno","I don't know",{}]];
+let ns={step:0,sense:[],scene:null,list:[],i:0};
+function nsName(){return state.kid.trim()||"your friend"}
+function renderNS(){
+  const b=$("nsbody"),N=nsName();
+  if(ns.step===0){
+    b.innerHTML=`<small>Step 1 of 2</small><h2>What is your body doing?</h2><p style="text-align:left">You can pick more than one.</p><div class="choices">${SENSE.map(([k,l])=>`<button class="choice${ns.sense.includes(k)?" on":""}" data-s="${k}">${l}</button>`).join("")}</div><div class="row"><button class="go ghostbtn" data-a="close">Back</button><button class="go" data-a="next">Next</button></div>`;
+  }else if(ns.step===1){
+    b.innerHTML=`<small>Step 2 of 2</small><h2>What is happening right now?</h2><p style="text-align:left">Pick one.</p><div class="choices">${SCENE.map(([k,l])=>`<button class="choice${ns.scene===k?" on":""}" data-c="${k}">${l}</button>`).join("")}</div><div class="row"><button class="go ghostbtn" data-a="back">Back</button><button class="go" data-a="guess">Next</button></div>`;
+  }else{
+    const f=ns.list[ns.i];
+    if(!f){clearFace();b.innerHTML=`<p class="suggest">That's okay.</p><p>Feelings can be hard to find. ${esc(N[0].toUpperCase()+N.slice(1))} is not sure either. You can try again later, or make the face yourself.</p><button class="go" data-a="close">OK</button>`;return}
+    b.innerHTML=`<p class="suggest">Could it be <b style="color:${FEEL[f][1]}">${FEEL[f][0]}</b>?</p><div class="row"><button class="go ghostbtn" data-a="nope">Not quite</button><button class="go" data-a="yes">Yes!</button></div>`;
+  }
+}
+function clearFace(){["eyes","brows","mouth"].forEach(k=>{state[k]=null;drawSlot(k)});save();update();fit()}
+function previewFeeling(f){
+  const [e,br,m]=FACE[f];state.eyes=e;state.brows=br;state.mouth=m;
+  ["eyes","brows","mouth"].forEach(k=>drawSlot(k,true));save();update();fit();renderTray();
+}
+function guess(){
+  const sc={};
+  ns.sense.forEach(k=>{const v=SENSE.find(x=>x[0]===k)[3];for(const f in v)sc[f]=(sc[f]||0)+v[f]});
+  const c=SCENE.find(x=>x[0]===ns.scene);if(c)for(const f in c[2])sc[f]=(sc[f]||0)+c[2][f]*1.2;
+  ns.list=Object.keys(sc).sort((a,b)=>sc[b]-sc[a]).slice(0,3);ns.i=0;ns.step=2;
+  if(ns.list[0])previewFeeling(ns.list[0]);renderNS();
+}
+$("nsbody").addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.s){const k=t.dataset.s;if(k==="cant")ns.sense=["cant"];else{ns.sense=ns.sense.filter(x=>x!=="cant");const i=ns.sense.indexOf(k);i>=0?ns.sense.splice(i,1):ns.sense.push(k)}renderNS();return}
+  if(t.dataset.c){ns.scene=t.dataset.c;renderNS();return}
+  const a=t.dataset.a;
+  if(a==="close")$("ns").hidden=true;
+  if(a==="next"){ns.step=1;renderNS()}
+  if(a==="back"){ns.step=0;renderNS()}
+  if(a==="guess")guess();
+  if(a==="nope"){ns.i++;if(ns.list[ns.i])previewFeeling(ns.list[ns.i]);renderNS()}
+  if(a==="yes"){$("ns").hidden=true;cat="help";renderChips();renderTray()}
+});
+$("notsure").addEventListener("click",()=>{ns={step:0,sense:[],scene:null,list:[],i:0};renderNS();$("ns").hidden=false});
+
+/* ---------- v2: feelings diary ---------- */
+let diary=[];try{diary=JSON.parse(localStorage.getItem("le-diary")||"[]")}catch(e){}
+const saveDiary=()=>{try{localStorage.setItem("le-diary",JSON.stringify(diary))}catch(e){}};
+if(!diary.length){
+  const now=new Date(),mk=(daysAgo,h,f,where,help)=>{const d=new Date(now);d.setDate(d.getDate()-daysAgo);d.setHours(h,Math.floor(Math.random()*50),0,0);return {t:d.toISOString(),f,where,help,ex:true}};
+  const back=(dow)=>{const d=(now.getDay()-dow+7)%7;return d===0?7:d};
+  const m1=back(1),m2=m1+7;
+  diary=[mk(m2,8,"nervous",["tummy"],["hug"]),mk(m2-2,16,"cross",["hands"],["quiet"]),mk(m2-5,11,"happy",[],[]),mk(m2-6,19,"tired",["head"],["snack"]),
+         mk(m1,8,"nervous",["tummy"],["breathe"]),mk(m1-1,15,"frustrated",["hands","face"],["squeeze"]),mk(m1-3,17,"proud",[],[]),mk(m1-5,10,"excited",["tummy"],[]),mk(Math.max(1,m1-6),8,"nervous",["tummy","chest"],["hug"])]
+   .filter(x=>new Date(x.t)<now).sort((a,b)=>a.t<b.t?1:-1);
+}
+function partOfDay(h){return h<12?"mornings":h<17?"afternoons":"evenings"}
+const DAYS=["Sundays","Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays"];
+function renderDiary(){
+  const N=state.kid.trim()||"Your friend",b=$("diarybody"),hasEx=diary.some(x=>x.ex);
+  if(!diary.length){b.innerHTML=`<h2>Feelings diary</h2><p>Nothing here yet. Tap <b>Save feeling</b> after building a face and it's kept here, privately on this device.</p><button class="go" data-a="close">Close</button>`;return}
+  const cnt={};diary.forEach(x=>cnt[x.f]=(cnt[x.f]||0)+1);
+  const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);const tf=top[0],max=cnt[tf];
+  const tw={},td={};diary.filter(x=>x.f===tf).forEach(x=>{(x.where||[]).forEach(w=>tw[w]=(tw[w]||0)+1);const d=new Date(x.t),k=DAYS[d.getDay()]+" "+partOfDay(d.getHours());td[k]=(td[k]||0)+1});
+  const w=Object.keys(tw).sort((a,b)=>tw[b]-tw[a])[0],d=Object.keys(td).sort((a,b)=>td[b]-td[a])[0];
+  const insight=`<b style="color:${FEEL[tf][1]}">${FEEL[tf][0][0].toUpperCase()+FEEL[tf][0].slice(1)}</b> comes up most (${cnt[tf]} times)${w?`, usually felt in the <b>${w}</b>`:""}${d&&td[d]>1?`, often on <b>${d}</b>`:""}.`;
+  const fmt=t=>new Date(t).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
+  b.innerHTML=`<h2>Feelings diary</h2>${hasEx?`<p style="text-align:left">These are <b>example</b> entries to show how it works. Your own saved feelings will replace them.</p>`:""}
+  <div class="insight">${insight}</div>
+  <div class="bars">${top.map(f=>`<div class="bar"><span>${FEEL[f][0]}</span><i style="width:${Math.max(8,cnt[f]/max*100)}%;background:${FEEL[f][1]}"></i><span>${cnt[f]}</span></div>`).join("")}</div>
+  <div>${diary.map(x=>`<div class="entry"><i class="dot" style="background:${FEEL[x.f][1]}"></i><div><b>${esc(N)} felt ${FEEL[x.f][0]}</b>${x.ex?'<span class="tag" style="display:inline-block">Example</span>':""}<span>${fmt(x.t)}${x.where&&x.where.length?" · "+x.where.join(", "):""}${x.help&&x.help.length?" · helped: "+x.help.map(k=>HELP.find(h=>h[0]===k)[1].toLowerCase()).join(", "):""}</span></div></div>`).join("")}</div>
+  <div class="row">${hasEx?'<button class="go ghostbtn" data-a="clearex">Clear examples</button>':""}<button class="go" data-a="close">Close</button></div>`;
+}
+$("diarybody").addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.a==="close")$("diary").hidden=true;
+  if(t.dataset.a==="clearex"){diary=diary.filter(x=>!x.ex);saveDiary();renderDiary()}});
+$("diarybtn").addEventListener("click",()=>{renderDiary();$("diary").hidden=false});
+$("save").addEventListener("click",()=>{
+  const f=feeling();if(!f)return;
+  diary=diary.filter(x=>!x.ex);
+  diary.unshift({t:new Date().toISOString(),f,where:[...new Set(state.body.map(p=>REG[region(p.x,p.y)]))],help:state.help.slice()});
+  saveDiary();
+});
+update();
 </script>
 </body>
 </html>
