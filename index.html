@@ -191,8 +191,11 @@ header{gap:8px}
 .pk svg{width:52px;height:64px}
 .pk.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);background:var(--surface)}
 .brand{font-family:var(--body);line-height:1}
-.brand small{font-size:13px;font-weight:700;letter-spacing:.3px;text-transform:none;color:var(--muted);margin-bottom:2px}
-.brand{font-size:24px;font-weight:800;color:var(--accent);flex:none}
+.brand small{font-size:13px;font-weight:700;letter-spacing:.3px;text-transform:none;color:var(--muted);margin-bottom:2px;display:block}
+.brand{font-size:32px;font-weight:800;color:var(--accent);flex:none;margin-right:auto}
+header{align-items:flex-start;gap:8px}
+.app{padding-top:20px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.namebtn.round{width:40px;height:40px;padding:0;display:grid;place-items:center;margin-left:0}
 .namebtn{padding:8px 12px;min-width:0}
 a.iconbtn{text-decoration:none}
 .iconbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -209,8 +212,6 @@ a.iconbtn{text-decoration:none}
 .chips.fadeL{-webkit-mask-image:linear-gradient(to right,transparent,#000 18%);mask-image:linear-gradient(to right,transparent,#000 18%)}
 .chips.fadeL.fadeR{-webkit-mask-image:linear-gradient(to right,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(to right,transparent,#000 15%,#000 85%,transparent)}
 @media (prefers-reduced-motion:reduce){.more.nudge{animation:none}}
-.app{padding-top:26px}
-.brand small{color:var(--fg);opacity:.72}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -1205,6 +1206,10 @@ applyColor();setChar(state.char);renderChips();renderTray();
   c.addEventListener("click",e=>{if(!e.target.closest(".chip"))return;t.scrollTop=0;requestAnimationFrame(()=>{trayCheck();if(!m.hidden){m.classList.remove("nudge");void m.offsetWidth;m.classList.add("nudge")}})},true);
   renderChips();renderTray();
 })();
+/* names button becomes a round name-tag button, like the others in the header */
+(function(){const b=$("namebtn");b.classList.add("round");
+  const set=()=>{b.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M7 3h10v4H7z"/><path d="M7 12h6M7 15h4"/></svg>';const ch=state.child.trim(),n=state.kid.trim();b.setAttribute("aria-label","Names"+(n?`: ${ch?ch+" and ":""}${n}`:""))};
+  nameBtn=function(){set()};set();})();
 
 </script>
 </body>
