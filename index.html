@@ -11,7 +11,6 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Little Easier Feelings</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@500;700;800&display=swap">
 <style>
 /* Layout: one-screen app — names, feeling bubble + stitched friend on a mood mat, tabbed tray below. */
 :root{
@@ -19,8 +18,8 @@
   --accent:#8d76b0;
   --ink:#3a3550; --skin:#7cc3e6; --belly:#bfe2f3; --muzzle:#d4ecf7; --blush:#f2b8c0; --mouth:#6b3446; --tongue:#f08ea0;
   --mood:#f3eef8;
-  --display:"Fredoka","Baloo 2",ui-rounded,system-ui,sans-serif;
-  --body:"Nunito",ui-rounded,system-ui,sans-serif;
+  --display:ui-rounded,"SF Pro Rounded","Nunito","Varela Round",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --body:ui-rounded,"SF Pro Rounded","Nunito","Varela Round",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1d1b26;--surface:#2a2735;--line:#3b3748;--fg:#efeaf6;--muted:#a59fb4;--accent:#b8a3dc;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#1d1b26;--surface:#2a2735;--line:#3b3748;--fg:#efeaf6;--muted:#a59fb4;--accent:#b8a3dc;color-scheme:dark}
@@ -284,7 +283,7 @@ header{gap:8px}
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="jspdf.umd.min.js"></script>
 <script>
 let PROFILES=[],PID="p1";
 try{PROFILES=JSON.parse(localStorage.getItem("le-profiles")||"[]");PID=localStorage.getItem("le-active")||"p1"}catch(e){}
@@ -547,10 +546,10 @@ $("save").addEventListener("click",async()=>{
   try{await img.decode()}catch(e){}
   const ih=740,iw=ih*img.width/img.height;try{x.drawImage(img,(W-iw)/2,100,iw,ih)}catch(e){}
   x.textAlign="center";x.fillStyle="#3a3550";
-  x.font="600 64px Fredoka, sans-serif";
+  x.font="600 64px ui-rounded, 'SF Pro Rounded', Nunito, sans-serif";
   const name=state.kid.trim()||"My friend";
   let y=wrap(x,f?`${name} feels ${phrase(f)}${s.also?` and a bit ${FEEL[s.also][0]}`:""}`:`Meet ${name}`,W/2,980,W-160,74);
-  x.textAlign="left";x.font="800 34px Nunito, sans-serif";x.fillStyle="#7d768c";
+  x.textAlign="left";x.font="800 34px ui-rounded, 'SF Pro Rounded', Nunito, sans-serif";x.fillStyle="#7d768c";
   const rows=[];
   ["eyes","brows","mouth"].forEach(k=>{const p=state[k]&&find(k,state[k]);if(p)rows.push([PARTS[k].label,p.name])});
   if(f){
@@ -558,8 +557,8 @@ $("save").addEventListener("click",async()=>{
     if(state.help.length)rows.push(["What helps",state.help.map(k=>HELP.find(h=>h[0]===k)[1]).join(", ")])}
   y+=10;
   rows.forEach(([a,b])=>{x.fillStyle="#7d768c";x.fillText(a,110,y);x.fillStyle="#3a3550";y=wrap(x,b,400,y,W-500,46)+4});
-  if(f){y+=16;x.fillStyle="#3a3550";x.font="800 34px Nunito, sans-serif";x.fillText("So the feeling is: ",110,y);x.fillStyle=FEEL[f][1];x.fillText(FEEL[f][0],110+x.measureText("So the feeling is: ").width,y);y+=46}
-  const FH=y+110;x.font="700 28px Nunito, sans-serif";x.fillStyle="#a59fb4";
+  if(f){y+=16;x.fillStyle="#3a3550";x.font="800 34px ui-rounded, 'SF Pro Rounded', Nunito, sans-serif";x.fillText("So the feeling is: ",110,y);x.fillStyle=FEEL[f][1];x.fillText(FEEL[f][0],110+x.measureText("So the feeling is: ").width,y);y+=46}
+  const FH=y+110;x.font="700 28px ui-rounded, 'SF Pro Rounded', Nunito, sans-serif";x.fillStyle="#a59fb4";
   const d=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
   x.fillText(`${state.child.trim()?state.child.trim()+" · ":""}${d}`,110,FH-60);
   x.textAlign="right";x.fillText("little easier · feelings",W-110,FH-60);
