@@ -1106,32 +1106,38 @@ renderTray();
 const SEAM='class="seam"';
 const CHARS={
  manatee:{name:"Manatee",svg:$("bodyart").innerHTML,slots:{}},
- bear:{name:"Bear",slots:{hats:[150,48],neck:[150,214],patch:[176,302]},svg:`<g filter="url(#fabric)">
-  <circle cx="90" cy="64" r="27" fill="var(--skin)"/><circle cx="90" cy="64" r="14" fill="var(--belly)" stroke="none"/>
-  <circle cx="210" cy="64" r="27" fill="var(--skin)"/><circle cx="210" cy="64" r="14" fill="var(--belly)" stroke="none"/>
-  <ellipse cx="112" cy="362" rx="34" ry="20" fill="var(--skin)"/><ellipse cx="112" cy="364" rx="17" ry="9" fill="var(--belly)" stroke="none"/>
-  <ellipse cx="188" cy="362" rx="34" ry="20" fill="var(--skin)"/><ellipse cx="188" cy="364" rx="17" ry="9" fill="var(--belly)" stroke="none"/>
-  <path d="M80 240 C46 248 36 290 54 304 C66 312 82 298 88 280" fill="var(--skin)"/>
-  <path d="M220 240 C254 248 264 290 246 304 C234 312 218 298 212 280" fill="var(--skin)"/>
-  <ellipse cx="150" cy="286" rx="84" ry="74" fill="var(--skin)"/><ellipse cx="150" cy="286" rx="78" ry="68" ${SEAM}/>
-  <ellipse cx="150" cy="294" rx="52" ry="50" fill="var(--belly)" stroke="none"/><ellipse cx="150" cy="294" rx="47" ry="45" ${SEAM}/>
-  <circle cx="150" cy="128" r="84" fill="var(--skin)"/><circle cx="150" cy="128" r="78" ${SEAM}/><path d="M150 50 V96" ${SEAM} opacity=".35"/>
-  <ellipse cx="150" cy="160" rx="46" ry="34" fill="var(--muzzle)"/></g>
-  <path d="M137 139 Q150 132 163 139 Q161 150 150 152 Q139 150 137 139 Z" fill="var(--ink)" stroke-width="2"/><path d="M150 152 V158" fill="none" stroke-width="2.5"/>
-  <ellipse cx="86" cy="138" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="214" cy="138" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`},
- dino:{name:"Dinosaur",slots:{},svg:`<g filter="url(#fabric)">
-  ${[[150,46,0],[114,52,-26],[186,52,26],[214,70,46],[234,100,64],[244,136,78],[248,174,88]].map(([x,y,a])=>`<path d="M${x-17} ${y+14} Q${x} ${y-34} ${x+17} ${y+14} Z" transform="rotate(${a} ${x} ${y})" fill="var(--spike)"/>`).join("")}
-  <path d="M212 298 C258 302 286 266 282 228 C296 266 288 326 222 338 Z" fill="var(--skin)"/>
-  <ellipse cx="114" cy="360" rx="31" ry="18" fill="var(--skin)"/><ellipse cx="186" cy="360" rx="31" ry="18" fill="var(--skin)"/>
-  <path d="M98 372 v-6 M110 375 v-6 M122 373 v-6 M178 373 v-6 M190 375 v-6 M202 372 v-6" fill="none" stroke-width="2.5"/>
-  <path d="M150 52 C218 52 244 118 244 200 C244 282 210 340 150 340 C90 340 56 282 56 200 C56 118 82 52 150 52 Z" fill="var(--skin)"/>
-  <path d="M150 52 C218 52 244 118 244 200 C244 282 210 340 150 340 C90 340 56 282 56 200 C56 118 82 52 150 52 Z" transform="translate(150 200) scale(.93) translate(-150 -200)" ${SEAM}/>
-  <ellipse cx="150" cy="262" rx="58" ry="64" fill="var(--belly)" stroke="none"/>
-  <path d="M100 226 Q150 236 200 226 M94 252 Q150 263 206 252 M96 278 Q150 289 204 278 M106 304 Q150 314 194 304" fill="none" stroke-width="2" opacity=".45"/>
-  <path d="M72 220 C50 224 44 248 56 254 C66 258 74 248 78 240" fill="var(--skin)"/><path d="M228 220 C250 224 256 248 244 254 C234 258 226 248 222 240" fill="var(--skin)"/>
-  <ellipse cx="150" cy="156" rx="62" ry="38" fill="var(--muzzle)"/></g>
-  <circle cx="138" cy="136" r="3" fill="var(--ink)" stroke="none"/><circle cx="162" cy="136" r="3" fill="var(--ink)" stroke="none"/>
-  <ellipse cx="84" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="216" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`}
+ bear:{name:"Bear",slots:{hats:[150,50],neck:[150,212],patch:[184,286]},svg:`<g filter="url(#fabric)">
+  <path d="M72 70 C60 44 92 26 110 46" fill="var(--skin)"/><path d="M80 66 C76 52 92 42 102 52" fill="var(--belly)" stroke="none"/>
+  <path d="M228 70 C240 44 208 26 190 46" fill="var(--skin)"/><path d="M220 66 C224 52 208 42 198 52" fill="var(--belly)" stroke="none"/>
+  <circle cx="90" cy="64" r="26" fill="var(--skin)"/><path d="M76 66 Q84 46 102 54 Q98 74 80 76 Z" fill="var(--belly)" stroke="none"/>
+  <circle cx="210" cy="64" r="26" fill="var(--skin)"/><path d="M224 66 Q216 46 198 54 Q202 74 220 76 Z" fill="var(--belly)" stroke="none"/>
+  <path d="M150 196 C210 196 246 240 244 296 C242 336 212 352 150 352 C88 352 58 336 56 296 C54 240 90 196 150 196 Z" fill="var(--skin)"/>
+  <path d="M150 204 C204 204 236 244 234 294 C232 330 206 344 150 344 C94 344 68 330 66 294 C64 244 96 204 150 204 Z" ${SEAM}/>
+  <ellipse cx="150" cy="282" rx="50" ry="48" fill="var(--belly)" stroke="none"/>
+  <path d="M86 228 C52 236 34 276 50 296 C62 310 86 296 96 270" fill="var(--skin)"/><path d="M58 290 C66 296 78 292 84 282" ${SEAM}/>
+  <path d="M214 228 C248 236 266 276 250 296 C238 310 214 296 204 270" fill="var(--skin)"/><path d="M242 290 C234 296 222 292 216 282" ${SEAM}/>
+  <path d="M70 318 C46 330 44 372 76 378 C104 382 122 360 116 334" fill="var(--skin)"/><ellipse cx="80" cy="356" rx="17" ry="19" transform="rotate(-18 80 356)" fill="var(--belly)"/>
+  <path d="M230 318 C254 330 256 372 224 378 C196 382 178 360 184 334" fill="var(--skin)"/><ellipse cx="220" cy="356" rx="17" ry="19" transform="rotate(18 220 356)" fill="var(--belly)"/>
+  <path d="M150 44 C210 44 240 86 240 132 C240 180 202 214 150 214 C98 214 60 180 60 132 C60 86 90 44 150 44 Z" fill="var(--skin)"/>
+  <path d="M150 52 C204 52 232 90 232 132 C232 174 198 206 150 206 C102 206 68 174 68 132 C68 90 96 52 150 52 Z" ${SEAM}/>
+  <path d="M150 46 V92" ${SEAM} opacity=".35"/>
+  <path d="M150 128 C180 128 200 144 200 164 C200 186 178 198 150 198 C122 198 100 186 100 164 C100 144 120 128 150 128 Z" fill="var(--muzzle)"/></g>
+  <path d="M136 141 Q150 134 164 141 Q162 152 150 155 Q138 152 136 141 Z" fill="var(--ink)" stroke-width="2"/><path d="M144 140 q4 -2 8 0" fill="none" stroke="#fff" stroke-width="1.6" opacity=".7"/><path d="M150 155 V160" fill="none" stroke-width="2.5"/>
+  <ellipse cx="88" cy="140" rx="12" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="212" cy="140" rx="12" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`},
+ dino:{name:"Dinosaur",slots:{patch:[178,262]},svg:`<g filter="url(#fabric)">
+  ${[[150,46,0,1],[116,52,-26,.85],[184,52,26,1],[214,68,44,1.05],[236,98,62,1.05],[248,134,76,1],[254,176,86,.95],[256,216,94,.9],[258,276,112,.75],[280,296,128,.62],[298,318,140,.5]].map(([x,y,a,k])=>`<path d="M${x-16*k} ${y+12} Q${x-6*k} ${y-30*k} ${x} ${y-30*k} Q${x+6*k} ${y-30*k} ${x+16*k} ${y+12} Z" transform="rotate(${a} ${x} ${y})" fill="var(--spike)"/>`).join("")}
+  <path d="M222 262 C262 268 298 292 312 330 C316 342 304 348 296 340 C276 318 250 312 222 318 Z" fill="var(--skin)"/><path d="M226 290 C258 294 284 310 300 334" class="seam"/>
+  <path d="M150 50 C214 50 242 110 244 180 C246 250 236 300 216 326 L218 352 C220 368 204 374 190 370 L178 362 C170 348 130 348 122 362 L110 370 C96 374 80 368 82 352 L84 326 C64 300 54 250 56 180 C58 110 86 50 150 50 Z" fill="var(--skin)"/>
+  <path d="M150 58 C208 58 234 114 236 180 C238 246 228 292 208 318" ${SEAM}/><path d="M150 58 C92 58 66 114 64 180 C62 246 72 292 92 318" ${SEAM}/>
+  <path d="M90 372 l2 -9 M102 374 l0 -9 M114 371 l-2 -9 M186 371 l2 -9 M198 374 l0 -9 M210 372 l-2 -9" fill="none" stroke-width="2.6"/>
+  <path d="M150 196 C190 196 212 226 212 262 C212 298 188 322 150 322 C112 322 88 298 88 262 C88 226 110 196 150 196 Z" fill="var(--belly)" stroke="none"/>
+  <path d="M104 228 Q150 238 196 228 M94 254 Q150 265 206 254 M96 280 Q150 291 204 280 M108 304 Q150 313 192 304" fill="none" stroke-width="2" opacity=".4"/>
+  <path d="M76 214 C54 214 44 236 54 246 C60 252 68 248 70 242 M54 246 l-6 4 M60 250 l-4 6" fill="var(--skin)"/><path d="M224 214 C246 214 256 236 246 246 C240 252 232 248 230 242 M246 246 l6 4 M240 250 l4 6" fill="var(--skin)"/>
+  <ellipse cx="92" cy="92" rx="9" ry="6" transform="rotate(-30 92 92)" fill="var(--spike)" stroke="none" opacity=".75"/><ellipse cx="104" cy="74" rx="6" ry="4" transform="rotate(-20 104 74)" fill="var(--spike)" stroke="none" opacity=".75"/>
+  <ellipse cx="214" cy="104" rx="8" ry="5" transform="rotate(30 214 104)" fill="var(--spike)" stroke="none" opacity=".75"/>
+  <path d="M86 156 C86 120 116 112 150 112 C184 112 214 120 214 156 C214 186 186 196 150 196 C114 196 86 186 86 156 Z" fill="var(--muzzle)"/></g>
+  <path d="M134 128 q4 -4 8 0 M158 128 q4 -4 8 0" fill="none" stroke-width="3"/>
+  <ellipse cx="80" cy="136" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="220" cy="136" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`}
 };
 const BASESLOT={hats:[150,54],neck:[150,206],patch:[174,282],eyes:[150,100],brows:[150,80],mouth:[150,166]};
 const dark=(h,a)=>{const n=parseInt(h.slice(1),16),f=x=>Math.round(x*(1-a));return `rgb(${f(n>>16)},${f(n>>8&255)},${f(n&255)})`};
