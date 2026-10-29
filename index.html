@@ -222,6 +222,7 @@ header{display:flex;align-items:center;gap:10px}
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const pair=(one,mirror)=>`<g transform="translate(-32 0)">${one}</g><g transform="translate(32 0)${mirror?' scale(-1 1)':''}">${one}</g>`;
 const S='stroke="var(--ink)" stroke-linecap="round" stroke-linejoin="round"';
@@ -615,11 +616,13 @@ function renderDiary(){
   <div class="insight">${insight}</div>
   <div class="bars">${top.map(f=>`<div class="bar"><span>${FEEL[f][0]}</span><i style="width:${Math.max(8,cnt[f]/max*100)}%;background:${FEEL[f][1]}"></i><span>${cnt[f]}</span></div>`).join("")}</div>
   <div>${diary.map(x=>`<div class="entry"><i class="dot" style="background:${FEEL[x.f][1]}"></i><div><b>${esc(N)} felt ${FEEL[x.f][0]}</b>${x.ex?'<span class="tag" style="display:inline-block">Example</span>':""}<span>${fmt(x.t)}${x.where&&x.where.length?" · "+x.where.join(", "):""}${x.help&&x.help.length?" · helped: "+x.help.map(k=>HELP.find(h=>h[0]===k)[1].toLowerCase()).join(", "):""}</span></div></div>`).join("")}</div>
-  <div class="row">${hasEx?'<button class="go ghostbtn" data-a="clearex">Clear examples</button>':""}<button class="go" data-a="close">Close</button></div>`;
+  <button class="go" data-a="pdf">Download PDF report</button>
+  <div class="row">${hasEx?'<button class="go ghostbtn" data-a="clearex">Clear examples</button>':""}<button class="go ghostbtn" data-a="close">Close</button></div>`;
 }
 $("diarybody").addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
   if(t.dataset.a==="close")$("diary").hidden=true;
-  if(t.dataset.a==="clearex"){diary=diary.filter(x=>!x.ex);saveDiary();renderDiary()}});
+  if(t.dataset.a==="clearex"){diary=diary.filter(x=>!x.ex);saveDiary();renderDiary()}
+  if(t.dataset.a==="pdf"){t.textContent="Making report…";makePDF().finally(()=>{t.textContent="Download PDF report"})}});
 $("diarybtn").addEventListener("click",()=>{renderDiary();$("diary").hidden=false});
 $("save").addEventListener("click",()=>{
   const f=feeling();if(!f)return;
@@ -627,6 +630,68 @@ $("save").addEventListener("click",()=>{
   diary.unshift({t:new Date().toISOString(),f,where:[...new Set(state.body.map(p=>REG[region(p.x,p.y)]))],help:state.help.slice()});
   saveDiary();
 });
+/* ---------- v2: PDF report ---------- */
+const rgb=h=>{const n=parseInt(h.slice(1),16);return [n>>16,n>>8&255,n&255]};
+async function friendPNG(){
+  try{const img=new Image();img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(charSVG());await img.decode();
+    const c=document.createElement("canvas");c.width=360;c.height=Math.round(360*img.height/img.width);c.getContext("2d").drawImage(img,0,0,c.width,c.height);return {d:c.toDataURL("image/png"),r:c.height/c.width}}catch(e){return null}
+}
+async function makePDF(){
+  if(!window.jspdf){alertBox("The report tool didn't load. Check your connection and try again.");return}
+  const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4"}),W=210,M=18,ink=[58,53,80],mut=[125,118,140];
+  const child=state.child.trim(),friend=state.kid.trim()||"their friend",ex=diary.some(x=>x.ex);
+  const list=diary.slice().sort((a,b)=>a.t<b.t?-1:1);
+  const d0=new Date(list[0].t),d1=new Date(list[list.length-1].t),fd=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  let y=M;
+  doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...mut);doc.text("LITTLE EASIER · FEELINGS",M,y);
+  y+=9;doc.setFontSize(22);doc.setTextColor(...ink);doc.text("Feelings report",M,y);
+  y+=8;doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(...mut);
+  doc.text(`${child?child+"'s":"A child's"} feelings, shown through ${friend}`,M,y);
+  y+=5.5;doc.text(`${fd(d0)} to ${fd(d1)}  ·  ${list.length} entries  ·  made ${fd(new Date())}`,M,y);
+  const fp=await friendPNG();if(fp){const w=30;doc.addImage(fp.d,"PNG",W-M-w,M-4,w,w*fp.r)}
+  if(ex){y+=7;doc.setTextColor(194,69,47);doc.setFont("helvetica","bold");doc.text("This report uses example entries, not real ones.",M,y)}
+  // summary
+  const cnt={},where={},help={};list.forEach(x=>{cnt[x.f]=(cnt[x.f]||0)+1;(x.where||[]).forEach(w=>where[w]=(where[w]||0)+1);(x.help||[]).forEach(h=>help[h]=(help[h]||0)+1)});
+  const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]),tf=top[0];
+  const tw={},td={};list.filter(x=>x.f===tf).forEach(x=>{(x.where||[]).forEach(w=>tw[w]=(tw[w]||0)+1);const d=new Date(x.t),k=DAYS[d.getDay()]+" "+partOfDay(d.getHours());td[k]=(td[k]||0)+1});
+  const w1=Object.keys(tw).sort((a,b)=>tw[b]-tw[a])[0],dd=Object.keys(td).sort((a,b)=>td[b]-td[a])[0];
+  const insight=`${FEEL[tf][0][0].toUpperCase()+FEEL[tf][0].slice(1)} came up most (${cnt[tf]} of ${list.length} times)${w1?`, usually felt in the ${w1}`:""}${dd&&td[dd]>1?`, often on ${dd}`:""}.`;
+  y=Math.max(y,M+32)+8;
+  doc.setFillColor(245,241,236);const lines=doc.splitTextToSize(insight,W-2*M-10);doc.roundedRect(M,y,W-2*M,lines.length*6+8,3,3,"F");
+  doc.setFont("helvetica","bold");doc.setFontSize(12);doc.setTextColor(...ink);doc.text(lines,M+5,y+7);y+=lines.length*6+16;
+  // bars
+  doc.setFontSize(13);doc.text("How often each feeling came up",M,y);y+=6;
+  const max=cnt[tf];doc.setFontSize(10);
+  top.forEach(f=>{doc.setFont("helvetica","normal");doc.setTextColor(...ink);doc.text(FEEL[f][0],M,y+3.5);
+    doc.setFillColor(...rgb(FEEL[f][1]));doc.roundedRect(M+30,y,Math.max(3,(W-2*M-45)*cnt[f]/max),4.5,1.5,1.5,"F");
+    doc.text(String(cnt[f]),W-M,y+3.5,{align:"right"});y+=7});
+  // where + help
+  y+=4;const col=(title,obj,label,x)=>{let yy=y;doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(...ink);doc.text(title,x,yy);yy+=6;doc.setFont("helvetica","normal");doc.setFontSize(10);
+    const k=Object.keys(obj).sort((a,b)=>obj[b]-obj[a]);if(!k.length){doc.setTextColor(...mut);doc.text("Not recorded",x,yy);return yy+6}
+    k.forEach(i=>{doc.text(`${label(i)}`,x,yy);doc.text(String(obj[i]),x+70,yy,{align:"right"});yy+=5.5});return yy};
+  const ya=col("Where in the body",where,w=>w,M),yb=col("What helped",help,h=>HELP.find(x=>x[0]===h)[1],W/2+4);y=Math.max(ya,yb)+6;
+  // table
+  doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("Every entry",M,y);y+=6;
+  const cols=[M,M+38,M+66,M+106],head=["When","Feeling","Where","What helped"];
+  const th=()=>{doc.setFontSize(9);doc.setTextColor(...mut);head.forEach((h,i)=>doc.text(h.toUpperCase(),cols[i],y));y+=2;doc.setDrawColor(230,221,211);doc.line(M,y,W-M,y);y+=5};
+  th();doc.setFontSize(10);
+  list.slice().reverse().forEach(x=>{
+    const d=new Date(x.t),when=d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})+" "+d.toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit"});
+    const wh=doc.splitTextToSize((x.where||[]).join(", ")||"-",36),hp=doc.splitTextToSize((x.help||[]).map(h=>HELP.find(z=>z[0]===h)[1]).join(", ")||"-",W-M-cols[3]),h=Math.max(wh.length,hp.length)*4.6+2.4;
+    if(y+h>285){doc.addPage();y=M;th();doc.setFontSize(10)}
+    doc.setFont("helvetica","normal");doc.setTextColor(...ink);doc.text(when,cols[0],y);
+    doc.setFillColor(...rgb(FEEL[x.f][1]));doc.circle(cols[1]+1.4,y-1.2,1.4,"F");doc.setFont("helvetica","bold");doc.text(FEEL[x.f][0],cols[1]+4.5,y);
+    doc.setFont("helvetica","normal");doc.text(wh,cols[2],y);doc.text(hp,cols[3],y);y+=h});
+  const n=doc.getNumberOfPages();
+  for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(...mut);doc.setFont("helvetica","normal");
+    doc.text("Recorded by the child with Little Easier Feelings. Kept privately on their device. Not a clinical assessment.",M,292);doc.text(`${i} / ${n}`,W-M,292,{align:"right"})}
+  const fname=`feelings-report-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}-${new Date().toISOString().slice(0,10)}.pdf`;
+  const blob=doc.output("blob");
+  try{const f=new File([blob],fname,{type:"application/pdf"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{doc.save(fname)}catch(e){}
+}
+function alertBox(m){const b=$("diarybody");const p=document.createElement("p");p.textContent=m;b.appendChild(p)}
+
 update();
 </script>
 </body>
