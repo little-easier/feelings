@@ -184,7 +184,6 @@ header{gap:8px}
 .intro li b{font-weight:800}
 .nudge{background:#fbf0d6;color:#5b4a1f;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;line-height:1.4;display:flex;flex-direction:column;gap:8px}
 .nudge button{align-self:flex-start}
-.calmlink{grid-column:1/-1;font-size:13px;font-weight:800;color:var(--accent);margin:0}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -660,7 +659,7 @@ if(!diary.length){
    .filter(x=>new Date(x.t)<now).sort((a,b)=>a.t<b.t?1:-1);
 }
 function partOfDay(h){return h<12?"mornings":h<17?"afternoons":"evenings"}
-const DAYS=["Sundays","Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays"];
+const DAYS=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 function renderDiary(){
   const N=state.kid.trim()||"Your friend",b=$("diarybody"),hasEx=diary.some(x=>x.ex);
   if(!diary.length){b.innerHTML=`<h2>Feelings diary</h2><p>Nothing here yet. Tap <b>Save feeling</b> after building a face and it's kept here, privately on this device.</p><button class="go" data-a="close">Close</button>`;return}
@@ -1075,19 +1074,25 @@ applyLow();update();
   $("introok").addEventListener("click",()=>{try{localStorage.setItem("le-intro-seen","1")}catch(e){}sh.hidden=true;if(!state.child&&!state.kid)openSheet()});
   if(!seen)$("sheet").hidden=true;
 })();
-const BK="le-lastbackup"+PSUF;
+const BK="le-backupat"+PSUF,MUTE="le-nomind"+PSUF;
+const realCount=()=>diary.filter(x=>!x.ex).length;
+const setBK=()=>{try{localStorage.setItem(BK,String(realCount()))}catch(e){}};
 const _backup=backup;
-backup=function(){_backup();try{localStorage.setItem(BK,new Date().toISOString())}catch(e){}};
+backup=function(){_backup();setBK()};
 const _rd5=renderDiary;
 renderDiary=function(){
-  _rd5();const real=diary.filter(x=>!x.ex).length;let last=null;try{last=localStorage.getItem(BK)}catch(e){}
-  const old=!last||(Date.now()-new Date(last))>30*864e5;
-  if(real>=5&&old){const n=document.createElement("div");n.className="nudge";
-    n.innerHTML=`<span>${last?"It's been a while since your last backup.":"You haven't backed up yet."} There ${real===1?"is":"are"} ${real} entries that only live on this phone.</span><button class="go small" data-a="backup" type="button">Back up now</button>`;
-    const h=$("diarybody").querySelector("h2");h.after(n)}
+  _rd5();let base=0,mute=false;try{base=+(localStorage.getItem(BK)||0);mute=localStorage.getItem(MUTE)==="1"}catch(e){}
+  const fresh=realCount()-base;if(mute||fresh<5)return;
+  const n=document.createElement("div");n.className="nudge";
+  n.innerHTML=`<span><b>${fresh} new entries since your last backup.</b> We're showing this because we care about your diary. It only lives on this phone, and if it's lost, nobody can get it back.</span><div class="row"><button class="go small" data-a="backup" type="button">Back up now</button><button class="go ghostbtn small" data-n="later" type="button">Later</button></div><button class="mini" data-n="mute" type="button" style="align-self:center">Don't remind me again</button>`;
+  $("diarybody").querySelector("h2").after(n);
 };
-const _rt5=renderTray;
-renderTray=function(){_rt5();if(cat==="help"&&state.help.includes("calm")){const a=document.createElement("a");a.className="calmlink";a.href="https://littleeasier.co.uk/calm/";a.target="_blank";a.rel="noopener";a.textContent="Open Little Easier Calm ↗";$("tray").prepend(a)}};
+$("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-n]");if(!t)return;
+  if(t.dataset.n==="later")setBK();
+  if(t.dataset.n==="mute")try{localStorage.setItem(MUTE,"1")}catch(e){}
+  renderDiary()});
+const hc=HELP.find(h=>h[0]==="calm");if(hc)hc[1]="Sensory play";
+renderTray();
 
 </script>
 </body>
