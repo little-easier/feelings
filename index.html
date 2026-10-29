@@ -185,6 +185,12 @@ header{gap:8px}
 .nudge{background:#fbf0d6;color:#5b4a1f;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;line-height:1.4;display:flex;flex-direction:column;gap:8px}
 .nudge button{align-self:flex-start}
 @media (min-width:640px){.chips{flex-wrap:wrap;overflow:visible}}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick .eyebrow{font-size:14px;font-weight:800}
+.pickrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pk{border:1.5px solid var(--line);background:var(--bg);border-radius:18px;padding:8px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--fg);font-weight:800;font-size:12px}
+.pk svg{width:52px;height:64px}
+.pk.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);background:var(--surface)}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -215,9 +221,10 @@ header{gap:8px}
 
   <div class="stage" id="stage">
     <div class="bubble"><div class="feel" id="feel">Give your friend a face</div></div>
-    <div class="moWrap" id="moWrap"><svg class="mo" id="mo" viewBox="0 30 300 360" role="img" aria-label="Your manatee friend">
+    <div class="moWrap" id="moWrap"><svg class="mo" id="mo" viewBox="0 30 300 360" role="img" aria-label="Your feelings friend">
       <g filter="url(#hand)" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
         <g id="char">
+          <g id="bodyart">
           <g filter="url(#fabric)">
           <ellipse cx="150" cy="352" rx="74" ry="26" fill="var(--skin)"/>
           <ellipse cx="150" cy="352" rx="66" ry="19" class="seam"/>
@@ -236,6 +243,7 @@ header{gap:8px}
           <g fill="var(--ink)" stroke="none" opacity=".55"><circle cx="112" cy="150" r="2.2"/><circle cx="104" cy="160" r="2.2"/><circle cx="116" cy="164" r="2.2"/><circle cx="188" cy="150" r="2.2"/><circle cx="196" cy="160" r="2.2"/><circle cx="184" cy="164" r="2.2"/></g>
           <ellipse cx="84" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>
           <ellipse cx="216" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>
+          </g>
           <g id="slot-neck" transform="translate(150 206)"></g>
           <g id="slot-patch" transform="translate(174 282)"></g>
           <g id="slot-eyes" transform="translate(150 100)"></g>
@@ -1094,6 +1102,69 @@ $("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-n]")
   renderDiary()});
 const hc=HELP.find(h=>h[0]==="calm");if(hc)hc[1]="Sensory play";
 renderTray();
+/* ---------- v3 stage 6: more friends ---------- */
+const SEAM='class="seam"';
+const CHARS={
+ manatee:{name:"Manatee",svg:$("bodyart").innerHTML,slots:{}},
+ bear:{name:"Bear",slots:{hats:[150,48],neck:[150,214],patch:[176,302]},svg:`<g filter="url(#fabric)">
+  <circle cx="90" cy="64" r="27" fill="var(--skin)"/><circle cx="90" cy="64" r="14" fill="var(--belly)" stroke="none"/>
+  <circle cx="210" cy="64" r="27" fill="var(--skin)"/><circle cx="210" cy="64" r="14" fill="var(--belly)" stroke="none"/>
+  <ellipse cx="112" cy="362" rx="34" ry="20" fill="var(--skin)"/><ellipse cx="112" cy="364" rx="17" ry="9" fill="var(--belly)" stroke="none"/>
+  <ellipse cx="188" cy="362" rx="34" ry="20" fill="var(--skin)"/><ellipse cx="188" cy="364" rx="17" ry="9" fill="var(--belly)" stroke="none"/>
+  <path d="M80 240 C46 248 36 290 54 304 C66 312 82 298 88 280" fill="var(--skin)"/>
+  <path d="M220 240 C254 248 264 290 246 304 C234 312 218 298 212 280" fill="var(--skin)"/>
+  <ellipse cx="150" cy="286" rx="84" ry="74" fill="var(--skin)"/><ellipse cx="150" cy="286" rx="78" ry="68" ${SEAM}/>
+  <ellipse cx="150" cy="294" rx="52" ry="50" fill="var(--belly)" stroke="none"/><ellipse cx="150" cy="294" rx="47" ry="45" ${SEAM}/>
+  <circle cx="150" cy="128" r="84" fill="var(--skin)"/><circle cx="150" cy="128" r="78" ${SEAM}/><path d="M150 50 V96" ${SEAM} opacity=".35"/>
+  <ellipse cx="150" cy="160" rx="46" ry="34" fill="var(--muzzle)"/></g>
+  <path d="M137 139 Q150 132 163 139 Q161 150 150 152 Q139 150 137 139 Z" fill="var(--ink)" stroke-width="2"/><path d="M150 152 V158" fill="none" stroke-width="2.5"/>
+  <ellipse cx="86" cy="138" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="214" cy="138" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`},
+ dino:{name:"Dinosaur",slots:{},svg:`<g filter="url(#fabric)">
+  ${[[150,46,0],[114,52,-26],[186,52,26],[214,70,46],[234,100,64],[244,136,78],[248,174,88]].map(([x,y,a])=>`<path d="M${x-17} ${y+14} Q${x} ${y-34} ${x+17} ${y+14} Z" transform="rotate(${a} ${x} ${y})" fill="var(--spike)"/>`).join("")}
+  <path d="M212 298 C258 302 286 266 282 228 C296 266 288 326 222 338 Z" fill="var(--skin)"/>
+  <ellipse cx="114" cy="360" rx="31" ry="18" fill="var(--skin)"/><ellipse cx="186" cy="360" rx="31" ry="18" fill="var(--skin)"/>
+  <path d="M98 372 v-6 M110 375 v-6 M122 373 v-6 M178 373 v-6 M190 375 v-6 M202 372 v-6" fill="none" stroke-width="2.5"/>
+  <path d="M150 52 C218 52 244 118 244 200 C244 282 210 340 150 340 C90 340 56 282 56 200 C56 118 82 52 150 52 Z" fill="var(--skin)"/>
+  <path d="M150 52 C218 52 244 118 244 200 C244 282 210 340 150 340 C90 340 56 282 56 200 C56 118 82 52 150 52 Z" transform="translate(150 200) scale(.93) translate(-150 -200)" ${SEAM}/>
+  <ellipse cx="150" cy="262" rx="58" ry="64" fill="var(--belly)" stroke="none"/>
+  <path d="M100 226 Q150 236 200 226 M94 252 Q150 263 206 252 M96 278 Q150 289 204 278 M106 304 Q150 314 194 304" fill="none" stroke-width="2" opacity=".45"/>
+  <path d="M72 220 C50 224 44 248 56 254 C66 258 74 248 78 240" fill="var(--skin)"/><path d="M228 220 C250 224 256 248 244 254 C234 258 226 248 222 240" fill="var(--skin)"/>
+  <ellipse cx="150" cy="156" rx="62" ry="38" fill="var(--muzzle)"/></g>
+  <circle cx="138" cy="136" r="3" fill="var(--ink)" stroke="none"/><circle cx="162" cy="136" r="3" fill="var(--ink)" stroke="none"/>
+  <ellipse cx="84" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="216" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`}
+};
+const BASESLOT={hats:[150,54],neck:[150,206],patch:[174,282],eyes:[150,100],brows:[150,80],mouth:[150,166]};
+const dark=(h,a)=>{const n=parseInt(h.slice(1),16),f=x=>Math.round(x*(1-a));return `rgb(${f(n>>16)},${f(n>>8&255)},${f(n&255)})`};
+if(!CHARS[state.char])state.char="manatee";
+function setChar(id,anim){
+  state.char=id;const C=CHARS[id];$("bodyart").innerHTML=C.svg;
+  for(const k in BASESLOT){const p=C.slots[k]||BASESLOT[k];$("slot-"+k).setAttribute("transform",`translate(${p[0]} ${p[1]})`)}
+  if(anim){const w=$("moWrap");w.animate([{transform:"scale(.85)",opacity:.4},{transform:"scale(1.04)"},{transform:"scale(1)",opacity:1}],{duration:420,easing:"ease-out"})}
+  save();fit();
+}
+const _ac6=applyColor;
+applyColor=function(){_ac6();const c=COLORS[state.color]||COLORS.blue;$("mo").style.setProperty("--spike",dark(c,.22))};
+TABS.splice(TABS.findIndex(t=>t[0]==="hats"),0,["friend","Friend"]);
+renderChips=function(){
+  const G={eyes:"Face",body:"Body",friend:"Dress up"};
+  $("chips").innerHTML=TABS.map(([k,l])=>`${G[k]?`<span class="grp">${G[k]}</span>`:""}<button class="chip" aria-pressed="${k===cat}" data-k="${k}">${l}</button>`).join("");
+};
+const _rt6=renderTray;
+renderTray=function(){
+  if(cat!=="friend")return _rt6();
+  $("mo").classList.remove("bodymode");
+  const st=$("mo").getAttribute("style")||"";
+  $("tray").innerHTML=Object.entries(CHARS).map(([k,C])=>`<button class="part opt${state.char===k?" on":""}" data-char="${k}" aria-label="${C.name}"><svg viewBox="20 30 260 360" style="${st};width:40px;height:46px"><g stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${C.svg.replace(/filter="url\(#fabric\)"/g,"")}</g></svg>${C.name}</button>`).join("");
+};
+$("tray").addEventListener("click",e=>{const b=e.target.closest("[data-char]");if(!b||state.char===b.dataset.char)return;setChar(b.dataset.char,true);renderTray()});
+(function(){
+  const form=$("nameform"),pick=document.createElement("div");pick.className="pick";
+  const draw=()=>{const st=$("mo").getAttribute("style")||"";pick.innerHTML=`<span class="eyebrow">Pick your friend</span><div class="pickrow">${Object.entries(CHARS).map(([k,C])=>`<button type="button" class="pk${state.char===k?" on":""}" data-pick="${k}" aria-label="${C.name}"><svg viewBox="20 30 260 360" style="${st}"><g stroke="var(--ink)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">${C.svg.replace(/filter="url\(#fabric\)"/g,"")}</g></svg><span>${C.name}</span></button>`).join("")}</div>`};
+  form.insertBefore(pick,form.querySelector("label"));draw();
+  pick.addEventListener("click",e=>{const b=e.target.closest("[data-pick]");if(!b)return;setChar(b.dataset.pick,true);draw();if(cat==="friend")renderTray()});
+  $("namebtn").addEventListener("click",draw);
+})();
+applyColor();setChar(state.char);renderChips();renderTray();
 
 </script>
 </body>
