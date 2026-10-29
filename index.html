@@ -1106,33 +1106,31 @@ renderTray();
 const SEAM='class="seam"';
 const CHARS={
  manatee:{name:"Manatee",svg:$("bodyart").innerHTML,slots:{}},
- bear:{name:"Bear",slots:{hats:[150,50],neck:[150,212],patch:[184,286]},svg:`<g filter="url(#fabric)">
-  <path d="M72 70 C60 44 92 26 110 46" fill="var(--skin)"/><path d="M80 66 C76 52 92 42 102 52" fill="var(--belly)" stroke="none"/>
-  <path d="M228 70 C240 44 208 26 190 46" fill="var(--skin)"/><path d="M220 66 C224 52 208 42 198 52" fill="var(--belly)" stroke="none"/>
-  <circle cx="90" cy="64" r="26" fill="var(--skin)"/><path d="M76 66 Q84 46 102 54 Q98 74 80 76 Z" fill="var(--belly)" stroke="none"/>
-  <circle cx="210" cy="64" r="26" fill="var(--skin)"/><path d="M224 66 Q216 46 198 54 Q202 74 220 76 Z" fill="var(--belly)" stroke="none"/>
-  <path d="M150 196 C210 196 246 240 244 296 C242 336 212 352 150 352 C88 352 58 336 56 296 C54 240 90 196 150 196 Z" fill="var(--skin)"/>
-  <path d="M150 204 C204 204 236 244 234 294 C232 330 206 344 150 344 C94 344 68 330 66 294 C64 244 96 204 150 204 Z" ${SEAM}/>
-  <ellipse cx="150" cy="282" rx="50" ry="48" fill="var(--belly)" stroke="none"/>
-  <path d="M86 228 C52 236 34 276 50 296 C62 310 86 296 96 270" fill="var(--skin)"/><path d="M58 290 C66 296 78 292 84 282" ${SEAM}/>
-  <path d="M214 228 C248 236 266 276 250 296 C238 310 214 296 204 270" fill="var(--skin)"/><path d="M242 290 C234 296 222 292 216 282" ${SEAM}/>
-  <path d="M70 318 C46 330 44 372 76 378 C104 382 122 360 116 334" fill="var(--skin)"/><ellipse cx="80" cy="356" rx="17" ry="19" transform="rotate(-18 80 356)" fill="var(--belly)"/>
-  <path d="M230 318 C254 330 256 372 224 378 C196 382 178 360 184 334" fill="var(--skin)"/><ellipse cx="220" cy="356" rx="17" ry="19" transform="rotate(18 220 356)" fill="var(--belly)"/>
-  <path d="M150 44 C210 44 240 86 240 132 C240 180 202 214 150 214 C98 214 60 180 60 132 C60 86 90 44 150 44 Z" fill="var(--skin)"/>
-  <path d="M150 52 C204 52 232 90 232 132 C232 174 198 206 150 206 C102 206 68 174 68 132 C68 90 96 52 150 52 Z" ${SEAM}/>
-  <path d="M150 46 V92" ${SEAM} opacity=".35"/>
-  <path d="M150 128 C180 128 200 144 200 164 C200 186 178 198 150 198 C122 198 100 186 100 164 C100 144 120 128 150 128 Z" fill="var(--muzzle)"/></g>
+ bear:{name:"Bear",slots:{hats:[150,50],neck:[150,214],patch:[184,288]},svg:`<g filter="url(#fabric)">
+  <circle cx="82" cy="70" r="27" fill="var(--skin)"/><path d="M68 72 Q76 52 94 60 Q90 80 72 82 Z" fill="var(--belly)" stroke="none"/>
+  <circle cx="218" cy="70" r="27" fill="var(--skin)"/><path d="M232 72 Q224 52 206 60 Q210 80 228 82 Z" fill="var(--belly)" stroke="none"/>
+  <path d="M150 186 C212 186 248 236 246 296 C244 338 212 354 150 354 C88 354 56 338 54 296 C52 236 88 186 150 186 Z" fill="var(--skin)"/>
+  <path d="M66 300 C68 332 96 345 150 345 C204 345 232 332 234 300" class="seam"/>
+  <ellipse cx="150" cy="284" rx="50" ry="48" fill="var(--belly)" stroke="none"/><ellipse cx="150" cy="284" rx="45" ry="43" class="seam"/>
+  <path d="M84 230 C50 238 32 278 48 298 C60 312 84 298 94 272" fill="var(--skin)"/><path d="M56 292 C64 298 76 294 82 284" class="seam"/>
+  <path d="M216 230 C250 238 268 278 252 298 C240 312 216 298 206 272" fill="var(--skin)"/><path d="M244 292 C236 298 224 294 218 284" class="seam"/>
+  <path d="M70 320 C46 332 44 374 76 380 C104 384 122 362 116 336" fill="var(--skin)"/><ellipse cx="80" cy="358" rx="17" ry="19" transform="rotate(-18 80 358)" fill="var(--belly)"/>
+  <path d="M230 320 C254 332 256 374 224 380 C196 384 178 362 184 336" fill="var(--skin)"/><ellipse cx="220" cy="358" rx="17" ry="19" transform="rotate(18 220 358)" fill="var(--belly)"/>
+  <path d="M150 46 C216 46 250 88 250 134 C250 186 208 216 150 216 C92 216 50 186 50 134 C50 88 84 46 150 46 Z" fill="var(--skin)"/>
+  <path d="M150 54 C210 54 242 92 242 134 C242 180 204 208 150 208 C96 208 58 180 58 134 C58 92 90 54 150 54 Z" class="seam"/>
+  <path d="M150 48 V92" class="seam" opacity=".35"/>
+  <path d="M150 128 C182 128 204 144 204 165 C204 188 180 200 150 200 C120 200 96 188 96 165 C96 144 118 128 150 128 Z" fill="var(--muzzle)"/></g>
   <path d="M136 141 Q150 134 164 141 Q162 152 150 155 Q138 152 136 141 Z" fill="var(--ink)" stroke-width="2"/><path d="M144 140 q4 -2 8 0" fill="none" stroke="#fff" stroke-width="1.6" opacity=".7"/><path d="M150 155 V160" fill="none" stroke-width="2.5"/>
-  <ellipse cx="88" cy="140" rx="12" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="212" cy="140" rx="12" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>`},
+  <ellipse cx="84" cy="142" rx="13" ry="8" fill="var(--blush)" stroke="none" opacity=".8"/><ellipse cx="216" cy="142" rx="13" ry="8" fill="var(--blush)" stroke="none" opacity=".8"/>`},
  dino:{name:"Dinosaur",slots:{patch:[178,262]},svg:`<g filter="url(#fabric)">
   ${[[150,46,0,1],[116,52,-26,.85],[184,52,26,1],[214,68,44,1.05],[236,98,62,1.05],[248,134,76,1],[254,176,86,.95],[256,216,94,.9],[258,276,112,.75],[280,296,128,.62],[298,318,140,.5]].map(([x,y,a,k])=>`<path d="M${x-16*k} ${y+12} Q${x-6*k} ${y-30*k} ${x} ${y-30*k} Q${x+6*k} ${y-30*k} ${x+16*k} ${y+12} Z" transform="rotate(${a} ${x} ${y})" fill="var(--spike)"/>`).join("")}
   <path d="M222 262 C262 268 298 292 312 330 C316 342 304 348 296 340 C276 318 250 312 222 318 Z" fill="var(--skin)"/><path d="M226 290 C258 294 284 310 300 334" class="seam"/>
-  <path d="M150 50 C214 50 242 110 244 180 C246 250 236 300 216 326 L218 352 C220 368 204 374 190 370 L178 362 C170 348 130 348 122 362 L110 370 C96 374 80 368 82 352 L84 326 C64 300 54 250 56 180 C58 110 86 50 150 50 Z" fill="var(--skin)"/>
-  <path d="M150 58 C208 58 234 114 236 180 C238 246 228 292 208 318" ${SEAM}/><path d="M150 58 C92 58 66 114 64 180 C62 246 72 292 92 318" ${SEAM}/>
-  <path d="M90 372 l2 -9 M102 374 l0 -9 M114 371 l-2 -9 M186 371 l2 -9 M198 374 l0 -9 M210 372 l-2 -9" fill="none" stroke-width="2.6"/>
+  <path d="M150 50 C214 50 242 110 244 180 C246 250 236 316 198 344 C178 358 122 358 102 344 C64 316 54 250 56 180 C58 110 86 50 150 50 Z" fill="var(--skin)"/>
+  <path d="M150 58 C208 58 234 114 236 180 C238 240 230 290 206 318" ${SEAM}/><path d="M150 58 C92 58 66 114 64 180 C62 240 70 290 94 318" ${SEAM}/>
+  
   <path d="M150 196 C190 196 212 226 212 262 C212 298 188 322 150 322 C112 322 88 298 88 262 C88 226 110 196 150 196 Z" fill="var(--belly)" stroke="none"/>
-  <path d="M104 228 Q150 238 196 228 M94 254 Q150 265 206 254 M96 280 Q150 291 204 280 M108 304 Q150 313 192 304" fill="none" stroke-width="2" opacity=".4"/>
-  <path d="M76 214 C54 214 44 236 54 246 C60 252 68 248 70 242 M54 246 l-6 4 M60 250 l-4 6" fill="var(--skin)"/><path d="M224 214 C246 214 256 236 246 246 C240 252 232 248 230 242 M246 246 l6 4 M240 250 l4 6" fill="var(--skin)"/>
+  <path d="M104 228 Q150 238 196 228 M94 254 Q150 265 206 254 M96 280 Q150 291 204 280 M108 304 Q150 313 192 304" fill="none" stroke-width="2" opacity=".4"/><path d="M80 280 C56 294 54 338 78 352 L76 364 C74 374 84 380 98 380 L128 380 C140 380 142 370 134 364 L122 356 C130 334 122 296 102 286 Z" fill="var(--skin)"/><path d="M84 300 C70 312 70 336 84 346" class="seam"/><path d="M98 376 l3 8 l3 -8 Z M110 377 l3 8 l3 -8 Z M122 376 l3 8 l3 -8 Z" fill="#fffdfa" stroke-width="2"/><g transform="matrix(-1 0 0 1 300 0)"><path d="M80 280 C56 294 54 338 78 352 L76 364 C74 374 84 380 98 380 L128 380 C140 380 142 370 134 364 L122 356 C130 334 122 296 102 286 Z" fill="var(--skin)"/><path d="M84 300 C70 312 70 336 84 346" class="seam"/><path d="M98 376 l3 8 l3 -8 Z M110 377 l3 8 l3 -8 Z M122 376 l3 8 l3 -8 Z" fill="#fffdfa" stroke-width="2"/></g>
+  <path d="M84 206 C66 204 52 218 56 234 C58 244 68 248 74 242 C78 238 74 232 72 230 C72 224 78 220 86 222 Z" fill="var(--skin)"/><path d="M58 240 l-5 7 l7 -3 Z M66 246 l-2 8 l5 -6 Z" fill="#fffdfa" stroke-width="1.8"/><g transform="matrix(-1 0 0 1 300 0)"><path d="M84 206 C66 204 52 218 56 234 C58 244 68 248 74 242 C78 238 74 232 72 230 C72 224 78 220 86 222 Z" fill="var(--skin)"/><path d="M58 240 l-5 7 l7 -3 Z M66 246 l-2 8 l5 -6 Z" fill="#fffdfa" stroke-width="1.8"/></g>
   <ellipse cx="92" cy="92" rx="9" ry="6" transform="rotate(-30 92 92)" fill="var(--spike)" stroke="none" opacity=".75"/><ellipse cx="104" cy="74" rx="6" ry="4" transform="rotate(-20 104 74)" fill="var(--spike)" stroke="none" opacity=".75"/>
   <ellipse cx="214" cy="104" rx="8" ry="5" transform="rotate(30 214 104)" fill="var(--spike)" stroke="none" opacity=".75"/>
   <path d="M86 156 C86 120 116 112 150 112 C184 112 214 120 214 156 C214 186 186 196 150 196 C114 196 86 186 86 156 Z" fill="var(--muzzle)"/></g>
