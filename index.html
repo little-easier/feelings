@@ -184,6 +184,7 @@ header{gap:8px}
 .intro li b{font-weight:800}
 .nudge{background:#fbf0d6;color:#5b4a1f;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;line-height:1.4;display:flex;flex-direction:column;gap:8px}
 .nudge button{align-self:flex-start}
+@media (min-width:640px){.chips{flex-wrap:wrap;overflow:visible}}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -956,7 +957,7 @@ makePDF=async function(){
   if(!window.jspdf){alertBox("The report tool didn't load. Check your connection and try again.");return}
   const list=realList();if(!list.length)return;
   const K=pdfKit(),{doc,M,W}=K,st=diaryStats(list),child=state.child.trim(),friend=state.kid.trim()||"their friend",ex=list.some(x=>x.ex);
-  await header(K,"Feelings report",[`${child?child+"'s":"A child's"} feelings, shown through ${friend}`,`${fd(new Date(list[0].t))} to ${fd(new Date(list[list.length-1].t))}  ·  ${list.length} entries  ·  made ${fd(new Date())}`]);
+  await header(K,"Feelings report",[`${child?child+"'s":"A child's"} feelings, shown through ${friend}`,`${fd(new Date(list[0].t))} to ${fd(new Date(list[list.length-1].t))}  ·  ${list.length} ${list.length===1?"entry":"entries"}  ·  made ${fd(new Date())}`]);
   if(ex)K.p("This report uses example entries, not real ones.",{bold:true,c:[194,69,47],after:4});
   K.box(insightText(st));
   K.h("How often each feeling came up");K.y+=2;const max=st.cnt[st.top[0]];
@@ -992,7 +993,7 @@ makePDF=async function(){
 async function makePassport(){
   if(!window.jspdf){alertBox("The report tool didn't load. Check your connection and try again.");return}
   const list=realList(),K=pdfKit(),{doc,M,W}=K,st=diaryStats(list),child=state.child.trim(),friend=state.kid.trim();
-  await header(K,`What helps me`,[child?`All about ${child}`:"A one-page profile",`Made ${fd(new Date())} from ${list.length} feelings entries${list.some(x=>x.ex)?" (examples)":""}`]);
+  await header(K,`What helps me`,[child?`All about ${child}`:"A one-page profile",`Made ${fd(new Date())} from ${list.length} feelings ${list.length===1?"entry":"entries"}${list.some(x=>x.ex)?" (examples)":""}`]);
   const sec=(t,items,empty)=>{K.y+=2;K.h(t,14);K.y+=1;if(!items.length){K.p(empty,{c:K.mut});return}items.forEach(i=>K.p("•  "+i,{size:11.5,lh:5.6,after:2}))};
   sec("Feelings I have a lot",st.top.slice(0,4).map(f=>{const p=st.per(f);return `I often feel ${FEEL[f][0]}.${p.where?` You might notice it in my ${p.where}.`:""}`}),"Not enough entries yet.");
   const hard=Object.keys(st.scene).sort((a,b)=>st.scene[b]-st.scene[a]).filter(k=>CHILDSCENE[k]&&!["play","kind","fun","did"].includes(k)).slice(0,4).map(k=>`When ${CHILDSCENE[k]}.`)
