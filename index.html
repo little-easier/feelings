@@ -108,7 +108,7 @@ header{display:flex;align-items:center;gap:10px}
   </header>
 
   <div class="stage" id="stage">
-    <div class="bubble"><div class="feel" id="feel">Give your friend a face</div><button class="say" id="say" aria-label="Say it out loud"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg></button></div>
+    <div class="bubble"><div class="feel" id="feel">Give your friend a face</div></div>
     <svg class="mo" id="mo" viewBox="0 30 300 360" role="img" aria-label="Your manatee friend">
       <g filter="url(#hand)" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
         <g id="char">
@@ -120,7 +120,7 @@ header{display:flex;align-items:center;gap:10px}
           <path d="M150 52 V336" class="seam" opacity=".35"/>
           <ellipse cx="150" cy="250" rx="62" ry="68" fill="var(--belly)" stroke="none"/>
           <ellipse cx="150" cy="250" rx="57" ry="63" class="seam"/>
-          <path d="M176 285 c-4 -8 -14 -6 -12 2 c1 5 8 9 12 13 c4 -4 11 -8 12 -13 c2 -8 -8 -10 -12 -2 Z" fill="var(--blush)" stroke-width="2"/>
+          
           <g><path d="M240 210 C268 216 284 244 274 262 C266 274 248 262 238 244" fill="var(--skin)"/><path d="M246 220 C264 226 274 244 268 254" class="seam"/></g>
           <path d="M60 210 C32 216 16 244 26 262 C34 274 52 262 62 244" fill="var(--skin)"/>
           <path d="M54 220 C36 226 26 244 32 254" class="seam"/>
@@ -131,6 +131,7 @@ header{display:flex;align-items:center;gap:10px}
           <ellipse cx="84" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>
           <ellipse cx="216" cy="132" rx="11" ry="7" fill="var(--blush)" stroke="none" opacity=".8"/>
           <g id="slot-neck" transform="translate(150 206)"></g>
+          <g id="slot-patch" transform="translate(174 282)"></g>
           <g id="slot-eyes" transform="translate(150 100)"></g>
           <g id="slot-brows" transform="translate(150 80)"></g>
           <g id="slot-mouth" transform="translate(150 166)"></g>
@@ -189,7 +190,7 @@ const PARTS={
   {id:"one",name:"One up",svg:`<g transform="translate(-32 2)"><path d="M-11 0 Q0 -4 11 0" fill="none" ${S} stroke-width="4"/></g><g transform="translate(32 -6)"><path d="M-11 2 Q0 -11 11 -1" fill="none" ${S} stroke-width="4"/></g>`,v:{confused:4}},
   {id:"knit",name:"Knitted",svg:pair(`<path d="M-12 -4 Q0 -5 12 3" fill="none" ${S} stroke-width="4.5"/>`,true)+`<path d="M-3 4 v6 M3 4 v6" ${S} stroke-width="2" opacity=".6"/>`,v:{frustrated:4,cross:1}}
  ]},
- mouth:{label:"Mouth",vb:"-30 -22 60 44",items:[
+ mouth:{label:"Mouth",vb:"-30 -26 70 50",items:[
   {id:"smile",name:"Smile",svg:`<path d="M-18 -4 Q0 14 18 -4" fill="none" ${S} stroke-width="4"/>`,v:{happy:3,calm:1}},
   {id:"grin",name:"Big grin",svg:`<path d="M-20 -6 Q0 24 20 -6 Z" fill="var(--mouth)" ${S} stroke-width="3.5"/><path d="M-9 6 Q0 13 9 6 Q0 2 -9 6" fill="var(--tongue)"/>`,v:{excited:4,happy:1}},
   {id:"proud",name:"Proud",svg:`<path d="M-16 0 Q2 11 18 -7" fill="none" ${S} stroke-width="4"/><path d="M19 -11 q3 3 0 7" fill="none" ${S} stroke-width="2.5"/>`,v:{proud:5}},
@@ -197,7 +198,7 @@ const PARTS={
   {id:"frown",name:"Frown",svg:`<path d="M-17 8 Q0 -8 17 8" fill="none" ${S} stroke-width="4"/>`,v:{sad:3,cross:1}},
   {id:"lip",name:"Lip wobble",svg:`<path d="M-16 7 Q-8 -3 0 3 Q8 -3 16 7" fill="none" ${S} stroke-width="3.5"/><path d="M-7 10 Q0 14 7 10" fill="none" ${S} stroke-width="2.5"/>`,v:{sad:4,worried:1}},
   {id:"oh",name:"Oh!",svg:`<ellipse rx="8" ry="10" fill="var(--mouth)" ${S} stroke-width="3.5"/>`,v:{surprised:4}},
-  {id:"yawn",name:"Yawn",svg:`<ellipse rx="12" ry="15" fill="var(--mouth)" ${S} stroke-width="3.5"/><ellipse cy="8" rx="7" ry="4" fill="var(--tongue)"/>`,v:{tired:5}},
+  {id:"yawn",name:"Yawn",svg:`<ellipse rx="11" ry="13" fill="var(--mouth)" ${S} stroke-width="3.5"/><ellipse cy="7" rx="6" ry="3.5" fill="var(--tongue)"/><path d="M18 -10 h7 l-7 7 h7 M28 -22 h9 l-9 9 h9" fill="none" ${S} stroke-width="2.5"/>`,v:{tired:5}},
   {id:"wobble",name:"Wobbly",svg:`<path d="M-18 2 Q-12 -5 -6 2 T6 2 T18 2" fill="none" ${S} stroke-width="3.5"/>`,v:{worried:3,nervous:1}},
   {id:"nervous",name:"Nervous",svg:`<g transform="translate(4 0) rotate(-8)"><rect x="-14" y="-6" width="28" height="12" rx="5" fill="#fff" ${S} stroke-width="3"/><path d="M-14 0 H14 M-5 -6 v12 M4 -6 v12" ${S} stroke-width="1.8"/></g>`,v:{nervous:5}},
   {id:"grr",name:"Grr",svg:`<rect x="-16" y="-6" width="32" height="12" rx="5" fill="#fff" ${S} stroke-width="3"/><path d="M-8 -6 v12 M0 -6 v12 M8 -6 v12" ${S} stroke-width="2"/>`,v:{cross:3,frustrated:1}},
@@ -224,6 +225,13 @@ const PARTS={
   {id:"tie",name:"Tie",svg:`<path d="M-8 -2 L8 -2 L6 10 L-6 10 Z" fill="#4c86b9" ${S} stroke-width="3"/><path d="M-6 10 L6 10 L12 54 L0 64 L-12 54 Z" fill="#6aa6d8" ${S} stroke-width="3"/><path d="M-5 24 L7 18 M-7 38 L9 30 M-8 52 L10 44" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>`},
   {id:"bandana",name:"Bandana",svg:`<path d="M-90 -8 Q0 16 90 -8 L0 50 Z" fill="#d0453a" ${S} stroke-width="3.5"/><g fill="#fff" stroke="none"><circle cx="-40" cy="10" r="3"/><circle cx="0" cy="22" r="3"/><circle cx="40" cy="10" r="3"/><circle cx="-12" cy="36" r="3"/><circle cx="14" cy="34" r="3"/></g>`},
   {id:"bib",name:"Bib",svg:`<path d="M-40 -4 Q0 6 40 -4 Q44 40 0 46 Q-44 40 -40 -4 Z" fill="#fffdfa" ${S} stroke-width="3.5"/><circle cy="22" r="7" fill="#f2b64f" stroke="none"/>`}
+ ]},
+ patch:{label:"Patches",vb:"-26 -26 52 52",dress:true,items:[
+  {id:"heart",name:"Heart",svg:`<path d="M0 12 C-17 1 -18 -11 -9 -13 C-4 -14 0 -10 0 -7 C0 -10 4 -14 9 -13 C18 -11 17 1 0 12 Z" fill="#f2a6b8" ${S} stroke-width="2.5"/><path d="M0 8 C-11 0 -12 -8 -7 -9" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="2 3" opacity=".8"/>`},
+  {id:"star",name:"Star",svg:`<path d="M0 -16 L4.7 -5 L16 -5 L7 2 L10 14 L0 7 L-10 14 L-7 2 L-16 -5 L-4.7 -5 Z" fill="#f6c94c" ${S} stroke-width="2.5"/>`},
+  {id:"plaster",name:"Plaster",svg:`<g transform="rotate(-25)"><rect x="-20" y="-7" width="40" height="14" rx="7" fill="#f3d2b0" ${S} stroke-width="2.5"/><rect x="-7" y="-7" width="14" height="14" fill="#e8b98e" stroke="none"/><g fill="#c9956a"><circle cx="-3" cy="-3" r="1"/><circle cx="3" cy="-3" r="1"/><circle cx="-3" cy="3" r="1"/><circle cx="3" cy="3" r="1"/></g></g>`},
+  {id:"pocket",name:"Pocket",svg:`<path d="M-15 -12 H15 V6 Q15 16 0 16 Q-15 16 -15 6 Z" fill="#f7f1e6" ${S} stroke-width="2.5"/><path d="M-12 -7 H12" fill="none" ${S} stroke-width="1.5" stroke-dasharray="3 3"/>`},
+  {id:"flowerp",name:"Flower",svg:`${[0,72,144,216,288].map(a=>`<ellipse cy="-8" rx="5.5" ry="7.5" transform="rotate(${a})" fill="#c9b3e8" ${S} stroke-width="2"/>`).join('')}<circle r="5" fill="#f6c94c" ${S} stroke-width="2"/>`}
  ]}
 };
 const FEEL={happy:["happy","#e08a2e"],excited:["excited","#d9497a"],calm:["calm","#3f9a7c"],proud:["proud","#2f8fa6"],sad:["sad","#4a7fc0"],worried:["worried","#8a6bc0"],nervous:["nervous","#b0702a"],cross:["cross","#d0453a"],frustrated:["frustrated","#c2452f"],surprised:["surprised","#c27b12"],confused:["confused","#7a8f2e"],tired:["tired","#6b7690"],silly:["silly","#c25bb5"]};
@@ -241,7 +249,7 @@ const HELP=[
  ["snack","Snack or drink",'<path d="M0 -5 C-8 -11 -16 -4 -14 4 C-12 12 -6 14 0 12 C6 14 12 12 14 4 C16 -4 8 -11 0 -5Z" fill="#f08a7a"/><path d="M0 -5 Q1 -11 4 -14" fill="none"/><path d="M3 -10 Q9 -14 12 -9 Q6 -6 3 -10Z" fill="#8fd19a"/>']
 ];
 const COLORS={blue:"#7cc3e6",green:"#8fd19a",sage:"#a8bfa0",mustard:"#e8c25a",pink:"#f0a9bd",lilac:"#b9adc4",grey:"#b3b6bd"};
-const TABS=[["eyes","Eyes"],["brows","Brows"],["mouth","Mouth"],["body","Where?",1],["help","What helps?"],["hats","Hats",1],["neck","Neck"]];
+const TABS=[["eyes","Eyes"],["brows","Brows"],["mouth","Mouth"],["body","Where?",1],["help","What helps?"],["hats","Hats",1],["neck","Neck"],["patch","Patches"]];
 
 let state={eyes:null,brows:null,mouth:null,hats:null,neck:null,kid:"",child:"",color:"blue",size:1,also:null,body:[],help:[]};
 try{Object.assign(state,JSON.parse(localStorage.getItem("le-feelings")||"{}"))}catch(e){}
@@ -390,7 +398,7 @@ $("tray").addEventListener("pointerup",e=>{
 $("tray").addEventListener("pointercancel",()=>{if(drag&&drag.ghost)drag.ghost.remove();drag=null});
 
 $("clear").addEventListener("click",()=>{["eyes","brows","mouth"].forEach(k=>{state[k]=null;drawSlot(k)});state.size=1;state.also=null;state.body=[];state.help=[];save();update();renderTray();fit()});
-$("say").addEventListener("click",()=>{try{const u=new SpeechSynthesisUtterance(sentence().text);u.rate=.9;u.pitch=1.1;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}});
+
 
 /* names */
 function nameBtn(){const ch=state.child.trim(),n=state.kid.trim();$("namebtn").textContent=n?(ch?`${ch} & ${n}`:n):"Names"}
