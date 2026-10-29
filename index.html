@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#f5f1ec">
 <link rel="icon" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Feelings">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Little Easier Feelings</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -134,6 +136,47 @@ header{display:flex;align-items:center;gap:10px}
 @keyframes tilt{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(-3deg)}}
 @keyframes sway{0%,100%{transform:rotate(-2.5deg) translateY(3px)}50%{transform:rotate(2.5deg) translateY(3px)}}
 @keyframes wobble{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.needbadges{position:absolute;left:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.nb{width:36px;height:36px;border-radius:50%;background:#fffdfa;box-shadow:0 2px 0 rgba(58,53,80,.12);display:grid;place-items:center}
+.nbi{width:26px;height:26px}
+.f-scared .moWrap{animation:shiver .16s linear infinite}
+.f-overwhelmed .moWrap{animation:overwhelm .5s ease-in-out infinite}
+.f-lonely .moWrap{animation:droop 5s ease-in-out infinite}
+.f-embarrassed .moWrap{animation:shy 3s ease-in-out infinite}
+.f-bored .moWrap{animation:sway 6s ease-in-out infinite}
+.f-loved .moWrap{animation:puff 1.8s ease-in-out infinite}
+@keyframes shiver{0%,100%{transform:scale(.95)}25%{transform:scale(.95) translateX(-2px)}75%{transform:scale(.95) translateX(2px)}}
+@keyframes overwhelm{0%,100%{transform:scale(.93) rotate(-1deg)}50%{transform:scale(.91) rotate(1deg)}}
+@keyframes shy{0%,100%{transform:scale(.96) rotate(-4deg) translateX(-6px)}50%{transform:scale(.96) rotate(-2deg) translateX(-6px)}}
+.details{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.details h3{margin:0;font-family:var(--display);font-weight:600;font-size:19px}
+.details label{font-weight:800;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1.5px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:8px 12px;font-weight:800;font-size:13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.details select,.details textarea{font:700 15px var(--body);padding:10px 12px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);-webkit-user-select:text;user-select:text}
+.details textarea{min-height:64px;resize:vertical}
+.entry .note{color:var(--fg);font-style:italic;font-weight:600}
+.entry .acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.entry .acts small{font-size:12px;font-weight:800;color:var(--muted)}
+.mini{border:1.5px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:4px 10px;font-weight:800;font-size:12px;cursor:pointer}
+.mini[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.mini.del{margin-left:auto;color:#c2452f}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.go.small{font-size:14px;padding:11px}
+header{gap:8px}
+.gsec{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.gsec h3{margin:0;font-family:var(--display);font-weight:600;font-size:19px}
+.gsec p,.gsec li{margin:0;font-size:14px;line-height:1.45;font-weight:600;color:var(--fg);text-align:left}
+.gsec ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.gsec a{color:var(--accent);font-weight:800}
+.kid{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;background:var(--bg);font-weight:800;font-size:14px}
+.kid span{flex:1;min-width:0}
+.kid small{display:block;font-weight:700;color:var(--muted);font-size:12px}
+.card .switch{flex-direction:row;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:800;font-size:15px}
+.switch input{width:46px;height:26px;accent-color:var(--accent)}
+.sel{user-select:text;-webkit-user-select:text}
+.lowdemand #notsure{display:none}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -158,6 +201,7 @@ header{display:flex;align-items:center;gap:10px}
   <header>
     <div class="brand"><small>little easier</small>Feelings</div>
     <button class="namebtn" id="namebtn" aria-label="Change names">Names</button>
+    <button class="iconbtn" id="grownbtn" aria-label="Grown-ups"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9.5" r="2.4"/><path d="M15.5 14.6A4.5 4.5 0 0 1 21 19"/></svg></button>
     <button class="iconbtn" id="diarybtn" aria-label="Feelings diary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M10 8h5"/></svg></button>
   </header>
 
@@ -194,6 +238,7 @@ header{display:flex;align-items:center;gap:10px}
         </g>
       </g>
     </svg></div>
+    <div class="needbadges" id="needbadges" aria-hidden="true"></div>
     <div class="swatches" id="swatches" role="group" aria-label="Colour"></div>
     <div class="tools"><button class="tool soft" id="notsure">Not sure?</button><button class="tool" id="clear">Start again</button><button class="tool main" id="save">Save feeling</button></div>
   </div>
@@ -212,6 +257,7 @@ header{display:flex;align-items:center;gap:10px}
   </form>
 </div>
 <div class="sheet bottom" id="ns" hidden><div class="card step" id="nsbody"></div></div>
+<div class="sheet" id="grown" hidden><div class="card" id="grownbody"></div></div>
 <div class="sheet" id="diary" hidden><div class="card" id="diarybody"></div></div>
 <div class="sheet" id="cardsheet" hidden>
   <div class="card">
@@ -224,6 +270,10 @@ header{display:flex;align-items:center;gap:10px}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+let PROFILES=[],PID="p1";
+try{PROFILES=JSON.parse(localStorage.getItem("le-profiles")||"[]");PID=localStorage.getItem("le-active")||"p1"}catch(e){}
+if(!PROFILES.length)PROFILES=[{id:"p1"}];if(!PROFILES.find(p=>p.id===PID))PID=PROFILES[0].id;
+const PSUF=PID==="p1"?"":"-"+PID;
 const pair=(one,mirror)=>`<g transform="translate(-32 0)">${one}</g><g transform="translate(32 0)${mirror?' scale(-1 1)':''}">${one}</g>`;
 const S='stroke="var(--ink)" stroke-linecap="round" stroke-linejoin="round"';
 const dot=`<circle r="7.5" fill="var(--ink)"/><circle cx="-2.5" cy="-2.5" r="2.2" fill="#fff"/>`;
@@ -311,9 +361,9 @@ const COLORS={blue:"#7cc3e6",green:"#8fd19a",sage:"#a8bfa0",mustard:"#e8c25a",pi
 const TABS=[["eyes","Eyes"],["brows","Brows"],["mouth","Mouth"],["body","Where?",1],["help","What helps?"],["hats","Hats",1],["neck","Neck"],["patch","Patches"]];
 
 let state={eyes:null,brows:null,mouth:null,hats:null,neck:null,kid:"",child:"",color:"blue",size:1,also:null,body:[],help:[]};
-try{Object.assign(state,JSON.parse(localStorage.getItem("le-feelings")||"{}"))}catch(e){}
+try{Object.assign(state,JSON.parse(localStorage.getItem("le-feelings"+PSUF)||"{}"))}catch(e){}
 if(!Array.isArray(state.body))state.body=[];if(!Array.isArray(state.help))state.help=[];
-const save=()=>{try{localStorage.setItem("le-feelings",JSON.stringify(state))}catch(e){}};
+const save=()=>{try{localStorage.setItem("le-feelings"+PSUF,JSON.stringify(state))}catch(e){}};
 let cat="eyes";
 const $=id=>document.getElementById(id);
 const find=(slot,id)=>PARTS[slot].items.find(p=>p.id===id);
@@ -591,14 +641,14 @@ $("nsbody").addEventListener("click",e=>{
 $("notsure").addEventListener("click",()=>{ns={step:0,sense:[],scene:null,list:[],i:0};renderNS();$("ns").hidden=false});
 
 /* ---------- v2: feelings diary ---------- */
-let diary=[];try{diary=JSON.parse(localStorage.getItem("le-diary")||"[]")}catch(e){}
-const saveDiary=()=>{try{localStorage.setItem("le-diary",JSON.stringify(diary))}catch(e){}};
+let diary=[];try{diary=JSON.parse(localStorage.getItem("le-diary"+PSUF)||"[]")}catch(e){}
+const saveDiary=()=>{try{localStorage.setItem("le-diary"+PSUF,JSON.stringify(diary))}catch(e){}};
 if(!diary.length){
-  const now=new Date(),mk=(daysAgo,h,f,where,help)=>{const d=new Date(now);d.setDate(d.getDate()-daysAgo);d.setHours(h,Math.floor(Math.random()*50),0,0);return {t:d.toISOString(),f,where,help,ex:true}};
+  const now=new Date(),mk=(daysAgo,h,f,where,help,place,scene,worked)=>{const d=new Date(now);d.setDate(d.getDate()-daysAgo);d.setHours(h,Math.floor(Math.random()*50),0,0);return {t:d.toISOString(),f,where,help,ex:true,place,scene,worked}};
   const back=(dow)=>{const d=(now.getDay()-dow+7)%7;return d===0?7:d};
   const m1=back(1),m2=m1+7;
-  diary=[mk(m2,8,"nervous",["tummy"],["hug"]),mk(m2-2,16,"cross",["hands"],["quiet"]),mk(m2-5,11,"happy",[],[]),mk(m2-6,19,"tired",["head"],["snack"]),
-         mk(m1,8,"nervous",["tummy"],["breathe"]),mk(m1-1,15,"frustrated",["hands","face"],["squeeze"]),mk(m1-3,17,"proud",[],[]),mk(m1-5,10,"excited",["tummy"],[]),mk(Math.max(1,m1-6),8,"nervous",["tummy","chest"],["hug"])]
+  diary=[mk(m2,8,"nervous",["tummy"],["hug"],"home","change","yes"),mk(m2-2,16,"overwhelmed",["head"],["quiet"],"home","loud","yes"),mk(m2-5,11,"happy",[],[],"out","play"),mk(m2-6,19,"tired",["head"],["snack"],"home","bed","bit"),
+         mk(m1,8,"nervous",["tummy"],["breathe"],"home","change","bit"),mk(m1-1,15,"frustrated",["hands","face"],["squeeze"],"school","no","no"),mk(m1-3,17,"proud",[],[],"home","did"),mk(m1-5,10,"excited",["tummy"],[],"out","fun"),mk(Math.max(1,m1-6),8,"nervous",["tummy","chest"],["hug"],"home","change","yes")]
    .filter(x=>new Date(x.t)<now).sort((a,b)=>a.t<b.t?1:-1);
 }
 function partOfDay(h){return h<12?"mornings":h<17?"afternoons":"evenings"}
@@ -627,7 +677,7 @@ $("diarybtn").addEventListener("click",()=>{renderDiary();$("diary").hidden=fals
 $("save").addEventListener("click",()=>{
   const f=feeling();if(!f)return;
   diary=diary.filter(x=>!x.ex);
-  diary.unshift({t:new Date().toISOString(),f,where:[...new Set(state.body.map(p=>REG[region(p.x,p.y)]))],help:state.help.slice()});
+  diary.unshift({t:new Date().toISOString(),f,where:[...new Set(state.body.map(p=>REG[region(p.x,p.y)]))],help:state.help.slice(),needs:(state.needs||[]).slice(),scene:lastScene||null});
   saveDiary();
 });
 /* ---------- v2: PDF report ---------- */
@@ -693,6 +743,316 @@ async function makePDF(){
 function alertBox(m){const b=$("diarybody");const p=document.createElement("p");p.textContent=m;b.appendChild(p)}
 
 update();
+/* ---------- v3 stage 1: more feelings, senses & needs ---------- */
+(function(){
+const P=PARTS,I=S;
+P.eyes.items.find(x=>x.id==="hearts").v={loved:4,happy:1};
+P.eyes.items.push(
+ {id:"squeeze",name:"Squeezed",svg:pair(`<path d="M-9 -7 L6 0 L-9 7" fill="none" ${I} stroke-width="4"/>`,true),v:{overwhelmed:4}},
+ {id:"half",name:"Half shut",svg:pair(`<path d="M-10 0 A10 10 0 0 0 10 0 Z" fill="var(--ink)" ${I} stroke-width="2"/><path d="M-12 0 H12" ${I} stroke-width="3.5"/>`),v:{bored:4,tired:1}},
+ {id:"aside",name:"Look away",svg:pair(`<circle r="10" fill="#fff" ${I} stroke-width="3"/><circle cx="5" cy="1" r="4.5" fill="var(--ink)"/>`),v:{embarrassed:3,bored:1}},
+ {id:"down",name:"Look down",svg:pair(`<circle r="10" fill="#fff" ${I} stroke-width="3"/><circle cy="5" r="4.5" fill="var(--ink)"/>`),v:{lonely:3,sad:1,embarrassed:1}});
+P.brows.items.push(
+ {id:"flat",name:"Flat",svg:pair(`<path d="M-11 0 H11" fill="none" ${I} stroke-width="4"/>`),v:{bored:3,calm:1}},
+ {id:"scared",name:"Scared",svg:pair(`<path d="M-12 1 Q-2 -5 11 -12" fill="none" ${I} stroke-width="4"/>`,true),v:{scared:3,overwhelmed:1}});
+P.mouth.items.push(
+ {id:"scared",name:"Scared",svg:`<path d="M-16 4 Q-10 -8 -4 2 Q0 -5 4 2 Q10 -8 16 4 Q0 15 -16 4 Z" fill="var(--mouth)" ${I} stroke-width="3"/>`,v:{scared:5}},
+ {id:"squiggle",name:"Too much",svg:`<path d="M-18 2 l6 -6 l6 6 l6 -6 l6 6 l6 -6" fill="none" ${I} stroke-width="3.5"/>`,v:{overwhelmed:5}},
+ {id:"lonelyf",name:"Small frown",svg:`<path d="M-9 5 Q0 -1 9 5" fill="none" ${I} stroke-width="3.5"/>`,v:{lonely:4,sad:1}},
+ {id:"tiny",name:"Shy",svg:`<path d="M-7 2 q3.5 -4 7 0 t7 0" fill="none" ${I} stroke-width="3"/>`,v:{embarrassed:4}},
+ {id:"side",name:"Bored",svg:`<path d="M-4 3 Q6 5 15 -1" fill="none" ${I} stroke-width="4"/>`,v:{bored:4}});
+Object.assign(FEEL,{scared:["scared","#7a4fb0"],overwhelmed:["overwhelmed","#b5427a"],lonely:["lonely","#5d7fa3"],embarrassed:["embarrassed","#d4607a"],bored:["bored","#8a8a5e"],loved:["loved","#e0607e"]});
+Object.assign(MOOD,{scared:"#ebe4f6",overwhelmed:"#f6e1ec",lonely:"#e4ebf3",embarrassed:"#fae3e8",bored:"#eeefe6",loved:"#fbe5ea"});
+ORDER.splice(ORDER.indexOf("calm"),0,"scared","overwhelmed","lonely","embarrassed","loved","bored");
+Object.assign(FACE,{scared:["wide","scared","scared"],overwhelmed:["squeeze","knit","squiggle"],lonely:["down","worry","lonelyf"],embarrassed:["aside","soft","tiny"],bored:["half","flat","side"],loved:["hearts","soft","smile"]});
+SENSE.splice(SENSE.length-1,0,
+ ["ears","Noises hurt my ears","head",{overwhelmed:3,scared:1},"loud"],
+ ["toomuch","Everything is too much","head",{overwhelmed:4}],
+ ["jumpy","I feel jumpy","chest",{scared:3,nervous:1}],
+ ["hide","I want to hide","face",{embarrassed:2,scared:2,overwhelmed:1}],
+ ["empty","My tummy is empty","tummy",{cross:1,tired:1},"hungry"],
+ ["hug","I want a cuddle","chest",{loved:2,lonely:2,sad:1}]);
+SCENE.splice(SCENE.length-1,0,
+ ["scary","Something scary happened",{scared:4}],
+ ["crowd","There are lots of people",{overwhelmed:3,worried:1}],
+ ["noone","No one is playing with me",{lonely:4}],
+ ["looked","People were looking at me",{embarrassed:4}],
+ ["nothing","There is nothing to do",{bored:4}],
+ ["kind","Someone was kind to me",{loved:3,happy:1}]);
+SCENE.find(x=>x[0]==="loud")[2].overwhelmed=3;
+})();
+const NEEDS=[
+ ["loud","Too loud","It is too loud.",'<path d="M-14 -5 H-7 L1 -12 V12 L-7 5 H-14 Z" fill="#cfe9f5"/><path d="M6 -6 Q10 0 6 6 M11 -11 Q18 0 11 11" fill="none"/>'],
+ ["bright","Too bright","It is too bright.",'<circle r="7" fill="#f6c94c"/><path d="M0 -15 V-11 M0 11 V15 M-15 0 H-11 M11 0 H15 M-10.6 -10.6 L-8 -8 M8 8 L10.6 10.6 M-10.6 10.6 L-8 8 M8 -8 L10.6 -10.6" fill="none"/>'],
+ ["itchy","Itchy","Something feels itchy.",'<path d="M-14 -8 L-6 -13 Q0 -9 6 -13 L14 -8 L11 -2 L8 -4 V13 H-8 V-4 L-11 -2 Z" fill="#f7f1e6"/><path d="M-4 0 l2 -2 l2 2 l2 -2 l2 2 M-4 6 l2 -2 l2 2 l2 -2 l2 2" fill="none" stroke="#d0453a" stroke-width="1.6"/>'],
+ ["hot","Too hot","{n} is too hot.",'<rect x="-4" y="-14" width="8" height="20" rx="4" fill="#fffdfa"/><circle cy="9" r="6.5" fill="#e0607e"/><path d="M0 9 V-6" stroke="#e0607e" stroke-width="3"/>'],
+ ["cold","Too cold","{n} is too cold.",'<path d="M0 -14 V14 M-12 -7 L12 7 M-12 7 L12 -7 M-3 -11 L0 -8 L3 -11 M-3 11 L0 8 L3 11" fill="none" stroke="#4c86b9"/>'],
+ ["hungry","Hungry","{n} is hungry.",'<path d="M-13 0 H13 Q13 12 0 12 Q-13 12 -13 0 Z" fill="#f3dca0"/><path d="M-6 -4 q2 -4 0 -8 M0 -4 q2 -4 0 -8 M6 -4 q2 -4 0 -8" fill="none"/>'],
+ ["thirsty","Thirsty","{n} is thirsty.",'<path d="M-9 -12 H9 L6 13 H-6 Z" fill="#fffdfa"/><path d="M-7.5 -2 H7.5 L5.8 11 H-5.8 Z" fill="#8fc7ea" stroke="none"/>'],
+ ["hurt","Something hurts","Something hurts.",'<g transform="rotate(-30)"><rect x="-15" y="-6" width="30" height="12" rx="6" fill="#f3d2b0"/><rect x="-5" y="-6" width="10" height="12" fill="#e8b98e" stroke="none"/></g>'],
+ ["toilet","Toilet","{n} needs the toilet.",'<rect x="-11" y="-14" width="10" height="13" rx="2" fill="#fffdfa"/><path d="M-13 -1 H12 Q12 9 2 10 L4 14 H-8 L-6 9 Q-13 7 -13 -1 Z" fill="#fffdfa"/>']];
+if(!Array.isArray(state.needs))state.needs=[];
+let lastScene=null;
+TABS.splice(TABS.findIndex(t=>t[0]==="help"),0,["senses","Senses"]);
+const NI=k=>NEEDS.find(n=>n[0]===k);
+const needIcon=(k,cls)=>`<svg class="${cls||"ic"}" viewBox="-20 -20 40 40"><g stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${NI(k)[3]}</g></svg>`;
+const _renderTray=renderTray;
+renderTray=function(){
+  if(cat!=="senses")return _renderTray();
+  $("mo").classList.remove("bodymode");
+  $("tray").innerHTML=`<p class="wide">Is something bothering your body?</p>`+NEEDS.map(([k,l])=>`<button class="part opt${state.needs.includes(k)?" on":""}" data-need="${k}">${needIcon(k)}${l}</button>`).join("");
+};
+$("tray").addEventListener("click",e=>{const b=e.target.closest("[data-need]");if(!b)return;const k=b.dataset.need,i=state.needs.indexOf(k);i>=0?state.needs.splice(i,1):state.needs.push(k);save();update();renderTray()});
+function needText(){const n=state.kid.trim()||"Your friend";return state.needs.map(k=>NI(k)[2].replace("{n}",n)).join(" ")}
+const _sentence=sentence;
+sentence=function(){
+  const s=_sentence();if(!state.needs.length)return s;
+  const nt=needText();
+  if(!s.f)return Object.assign(s,{html:`${esc(nt)}`,text:nt});
+  return Object.assign(s,{html:s.html.replace(/<small>.*<\/small>$/,`<small>${esc(nt)}</small>`),text:s.text+" "+nt});
+};
+const _upd3=update;
+update=function(){_upd3();const box=$("needbadges");if(box)box.innerHTML=state.needs.map(k=>`<span class="nb">${needIcon(k,"nbi")}</span>`).join("")};
+$("clear").addEventListener("click",()=>{state.needs=[];lastScene=null;save();update();renderTray()});
+$("nsbody").addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.a==="guess"||t.dataset.a==="yes"){lastScene=ns.scene&&ns.scene!=="dunno"?ns.scene:null;
+    const nd=ns.sense.map(k=>SENSE.find(x=>x[0]===k)[4]).filter(Boolean);state.needs=[...new Set([...state.needs,...nd])];save();update()}});
+renderChips();renderTray();update();
+/* ---------- v3 stage 2: diary details, did it help, delete, backup ---------- */
+const PLACES={home:"Home",school:"School",out:"Out and about"};
+const WORKED={yes:"Yes",bit:"A bit",no:"No"};
+const ADULT={new:"Something new was happening",change:"Plans changed",no:"Someone said no",lost:"Something broke or got lost",waiting:"Waiting",fun:"Something fun was coming",did:"They did something hard",loud:"It was too loud or busy",alone:"On their own",play:"Playing",bed:"Bedtime",scary:"Something scary happened",crowd:"Lots of people around",noone:"No one to play with",looked:"People were looking at them",nothing:"Nothing to do",kind:"Someone was kind to them"};
+const sceneLabel=id=>ADULT[id]||"";
+const times=n=>n===1?"once":n===2?"twice":n+" times";
+const lc=t=>t?t[0].toLowerCase()+t.slice(1):t;
+function diaryStats(list){
+  const cnt={},where={},help={},place={},scene={},needs={};
+  list.forEach(x=>{cnt[x.f]=(cnt[x.f]||0)+1;(x.where||[]).forEach(w=>where[w]=(where[w]||0)+1);(x.needs||[]).forEach(w=>needs[w]=(needs[w]||0)+1);
+    (x.help||[]).forEach(h=>{help[h]=help[h]||{n:0,yes:0,bit:0,no:0};help[h].n++;if(x.worked)help[h][x.worked]++});
+    if(x.place)place[x.place]=(place[x.place]||0)+1;if(x.scene)scene[x.scene]=(scene[x.scene]||0)+1});
+  const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
+  const per=f=>{const L=list.filter(x=>x.f===f),tw={},td={},ts={},tp={};
+    L.forEach(x=>{(x.where||[]).forEach(w=>tw[w]=(tw[w]||0)+1);const d=new Date(x.t),k=DAYS[d.getDay()]+" "+partOfDay(d.getHours());td[k]=(td[k]||0)+1;if(x.scene)ts[x.scene]=(ts[x.scene]||0)+1;if(x.place)tp[x.place]=(tp[x.place]||0)+1});
+    const best=o=>Object.keys(o).sort((a,b)=>o[b]-o[a])[0];
+    const hs={};L.forEach(x=>(x.help||[]).forEach(h=>{hs[h]=hs[h]||{s:0,n:0};hs[h].n++;hs[h].s+=x.worked==="yes"?2:x.worked==="bit"?1:x.worked==="no"?-1:0.5}));
+    const bh=Object.keys(hs).sort((a,b)=>hs[b].s-hs[a].s)[0];
+    return {n:L.length,where:best(tw),when:best(td),whenN:td[best(td)]||0,scene:best(ts),place:best(tp),help:bh&&hs[bh].s>0?bh:null};};
+  return {cnt,where,help,place,scene,needs,top,per};
+}
+function insightText(st){
+  const tf=st.top[0];if(!tf)return "";const p=st.per(tf);
+  let t=`${FEEL[tf][0][0].toUpperCase()+FEEL[tf][0].slice(1)} comes up most (${times(st.cnt[tf])})`;
+  if(p.where)t+=`, usually felt in the ${p.where}`;
+  if(p.scene)t+=`, often around: ${lc(sceneLabel(p.scene))}`;
+  if(p.whenN>1)t+=`, often on ${p.when}`;
+  if(p.place)t+=`, mostly ${p.place==="out"?"when out and about":"at "+PLACES[p.place].toLowerCase()}`;
+  return t+".";
+}
+let delArm=null;
+renderDiary=function(){
+  const N=state.kid.trim()||"Your friend",b=$("diarybody"),hasEx=diary.some(x=>x.ex);
+  const tools=`<div class="btnrow"><button class="go ghostbtn small" data-a="backup">Back up diary</button><button class="go ghostbtn small" data-a="restore">Restore backup</button></div><input type="file" id="restorefile" accept=".json,application/json" hidden>`;
+  if(!diary.length){b.innerHTML=`<h2>Feelings diary</h2><p style="text-align:left">Nothing here yet. Tap <b>Save feeling</b> after building a face and it's kept here, privately on this device.</p>${tools}<button class="go" data-a="close">Close</button>`;return}
+  const st=diaryStats(diary),max=st.cnt[st.top[0]];
+  const fmt=t=>new Date(t).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"});
+  b.innerHTML=`<h2>Feelings diary</h2>${hasEx?`<p style="text-align:left">These are <b>example</b> entries to show how it works. Your own saved feelings will replace them.</p>`:""}
+  <div class="insight">${esc(insightText(st))}</div>
+  <div class="bars">${st.top.map(f=>`<div class="bar"><span>${FEEL[f][0]}</span><i style="width:${Math.max(8,st.cnt[f]/max*100)}%;background:${FEEL[f][1]}"></i><span>${st.cnt[f]}</span></div>`).join("")}</div>
+  <div class="btnrow"><button class="go small" data-a="pdf">PDF report</button><button class="go small" data-a="passport">What helps me</button></div>
+  <div>${diary.map((x,i)=>{
+    const bits=[fmt(x.t)];if(x.place)bits.push(PLACES[x.place]);if(x.where&&x.where.length)bits.push("felt in "+x.where.join(", "));
+    if(x.scene)bits.push(lc(sceneLabel(x.scene)));if(x.needs&&x.needs.length)bits.push(x.needs.map(k=>NI(k)[1].toLowerCase()).join(", "));
+    const hl=(x.help||[]).map(k=>HELP.find(h=>h[0]===k)[1].toLowerCase()).join(", ");
+    return `<div class="entry"><i class="dot" style="background:${FEEL[x.f][1]}"></i><div><b>${esc(N)} felt ${FEEL[x.f][0]}</b>${x.ex?'<span class="tag" style="display:inline-block">Example</span>':""}<span>${esc(bits.join(" · "))}</span>${hl?`<span>Tried: ${esc(hl)}</span>`:""}${x.note?`<span class="note">“${esc(x.note)}”</span>`:""}
+    <div class="acts">${hl?`<small>Did it help?</small>${Object.entries(WORKED).map(([k,l])=>`<button class="mini" data-w="${k}" data-i="${i}" aria-pressed="${x.worked===k}">${l}</button>`).join("")}`:""}<button class="mini del" data-del="${i}">${delArm===i?"Tap again to delete":"Delete"}</button></div></div></div>`}).join("")}</div>
+  ${tools}
+  <div class="row">${hasEx?'<button class="go ghostbtn" data-a="clearex">Clear examples</button>':""}<button class="go ghostbtn" data-a="close">Close</button></div>`;
+};
+$("diarybody").addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.w){const x=diary[+t.dataset.i];x.worked=x.worked===t.dataset.w?null:t.dataset.w;saveDiary();renderDiary();return}
+  if(t.dataset.del!=null){const i=+t.dataset.del;if(delArm===i){diary.splice(i,1);delArm=null;saveDiary()}else delArm=i;renderDiary();return}
+  if(t.dataset.a==="backup")backup();
+  if(t.dataset.a==="restore")$("restorefile").click();
+},true);
+$("diarybody").addEventListener("change",e=>{if(e.target.id==="restorefile"&&e.target.files[0])restore(e.target.files[0])});
+async function shareOrSave(blob,fname,type){
+  try{const f=new File([blob],fname,{type});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove()}catch(e){}
+}
+function backup(){
+  const data={app:"little-easier-feelings",v:1,saved:new Date().toISOString(),state,diary:diary.filter(x=>!x.ex)};
+  shareOrSave(new Blob([JSON.stringify(data,null,1)],{type:"application/json"}),`feelings-backup-${(state.child.trim()||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}-${new Date().toISOString().slice(0,10)}.json`,"application/json");
+}
+function restore(file){
+  const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="little-easier-feelings")throw 0;
+      const have=new Set(diary.filter(x=>!x.ex).map(x=>x.t));diary=diary.filter(x=>!x.ex).concat((d.diary||[]).filter(x=>!have.has(x.t))).sort((a,b)=>a.t<b.t?1:-1);
+      if(d.state){Object.assign(state,{child:state.child||d.state.child||"",kid:state.kid||d.state.kid||""});save();nameBtn()}
+      saveDiary();renderDiary();const p=document.createElement("p");p.textContent=`Backup restored. The diary now has ${diary.length} entries.`;$("diarybody").prepend(p)}
+    catch(e){const p=document.createElement("p");p.textContent="That file isn't a Feelings backup. Choose the .json file made by Back up diary.";$("diarybody").prepend(p)}};
+  r.readAsText(file);
+}
+/* details form under the saved card */
+(function(){
+  const card=$("cardsheet").querySelector(".card"),box=document.createElement("div");box.className="details";box.id="details";
+  card.insertBefore(box,$("closecard"));
+  $("save").addEventListener("click",()=>{
+    const x=diary[0];if(!x||Date.now()-new Date(x.t)>4000){box.hidden=true;return}box.hidden=false;
+    box.innerHTML=`<h3>For the diary <span class="tag">optional</span></h3>
+    <label>Where were you?<div class="seg">${Object.entries(PLACES).map(([k,l])=>`<button type="button" data-p="${k}" aria-pressed="${x.place===k}">${l}</button>`).join("")}</div></label>
+    <label for="dscene">What was happening?<select id="dscene"><option value="">Not sure</option>${Object.entries(ADULT).map(([k,l])=>`<option value="${k}"${x.scene===k?" selected":""}>${l}</option>`).join("")}</select></label>
+    <label for="dnote">Note for grown-ups<textarea id="dnote" maxlength="300" placeholder="e.g. fire drill at school today"></textarea></label>`;
+  });
+  box.addEventListener("click",e=>{const t=e.target.closest("[data-p]");if(!t)return;const x=diary[0];x.place=x.place===t.dataset.p?null:t.dataset.p;saveDiary();box.querySelectorAll("[data-p]").forEach(b=>b.setAttribute("aria-pressed",x.place===b.dataset.p))});
+  box.addEventListener("change",e=>{if(e.target.id==="dscene"){diary[0].scene=e.target.value||null;saveDiary()}});
+  box.addEventListener("input",e=>{if(e.target.id==="dnote"){diary[0].note=e.target.value.trim()||null;saveDiary()}});
+})();
+/* ---------- v3 stage 3: reports in the child's voice ---------- */
+const CHILDSCENE={change:"plans change",new:"something new happens",no:"someone says no",lost:"something breaks or gets lost",waiting:"I have to wait",fun:"something fun is coming",did:"I do something hard",loud:"it is too loud or busy",alone:"I am on my own",play:"I am playing",bed:"it is bedtime",scary:"something scary happens",crowd:"there are lots of people",noone:"no one plays with me",looked:"people look at me",nothing:"there is nothing to do",kind:"someone is kind to me"};
+const CHILDNEED={loud:"Loud noises can be too much for me.",bright:"Bright lights can be too much for me.",itchy:"Some things feel itchy on my body.",hot:"I can get too hot.",cold:"I can get too cold.",hungry:"Sometimes I am hungry and need food.",thirsty:"Sometimes I am thirsty and need a drink.",hurt:"Sometimes something hurts.",toilet:"Sometimes I need the toilet."};
+const HL=k=>HELP.find(h=>h[0]===k)[1];
+function realList(){return diary.slice().sort((a,b)=>a.t<b.t?-1:1)}
+function aboutMe(list){
+  const st=diaryStats(list),child=state.child.trim(),friend=state.kid.trim(),out=[];
+  if(child)out.push(`My name is ${child}.${friend?` My feelings friend is called ${friend}.`:""}`);
+  st.top.slice(0,4).forEach(f=>{const p=st.per(f);let t=`I often feel ${FEEL[f][0]}.`;
+    if(p.where)t+=` I feel it in my ${p.where}.`;
+    if(p.scene&&CHILDSCENE[p.scene])t+=` This can happen when ${CHILDSCENE[p.scene]}.`;
+    if(p.help)t+=` ${HL(p.help)} helps me.`;out.push(t)});
+  Object.keys(st.needs).sort((a,b)=>st.needs[b]-st.needs[a]).forEach(k=>out.push(CHILDNEED[k]));
+  const notHelp=Object.keys(st.help).filter(h=>st.help[h].no>st.help[h].yes+st.help[h].bit);
+  notHelp.forEach(h=>out.push(`${HL(h)} does not always help me.`));
+  return out;
+}
+function pdfKit(){
+  const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4"});
+  const K={doc,W:210,M:18,ink:[58,53,80],mut:[125,118,140],y:18};
+  K.need=h=>{if(K.y+h>280){doc.addPage();K.y=K.M}};
+  K.h=(t,size)=>{K.need(14);doc.setFont("helvetica","bold");doc.setFontSize(size||13);doc.setTextColor(...K.ink);doc.text(t,K.M,K.y);K.y+=(size||13)*.5};
+  K.p=(t,o={})=>{doc.setFont("helvetica",o.bold?"bold":"normal");doc.setFontSize(o.size||10.5);doc.setTextColor(...(o.c||K.ink));
+    const L=doc.splitTextToSize(t,o.w||(K.W-2*K.M-(o.x||0)));K.need(L.length*(o.lh||5));doc.text(L,K.M+(o.x||0),K.y);K.y+=L.length*(o.lh||5)+(o.after||1.5)};
+  K.box=(lines,fill)=>{doc.setFont("helvetica","bold");doc.setFontSize(11.5);const L=doc.splitTextToSize(lines,K.W-2*K.M-10);const h=L.length*5.6+8;K.need(h);
+    doc.setFillColor(...(fill||[245,241,236]));doc.roundedRect(K.M,K.y,K.W-2*K.M,h,3,3,"F");doc.setTextColor(...K.ink);doc.text(L,K.M+5,K.y+7);K.y+=h+6};
+  K.foot=(msg)=>{const n=doc.getNumberOfPages();for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(...K.mut);doc.setFont("helvetica","normal");doc.text(msg,K.M,290);doc.text(`${i} / ${n}`,K.W-K.M,290,{align:"right"})}};
+  return K;
+}
+async function header(K,title,sub){
+  const {doc,M,W}=K;doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...K.mut);doc.text("LITTLE EASIER · FEELINGS",M,K.y);
+  K.y+=9;doc.setFontSize(22);doc.setTextColor(...K.ink);doc.text(title,M,K.y);K.y+=7;
+  doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(...K.mut);sub.forEach(s=>{doc.text(s,M,K.y);K.y+=5});
+  const fp=await friendPNG();if(fp){const w=28;doc.addImage(fp.d,"PNG",W-M-w,M-4,w,w*fp.r)}
+  K.y=Math.max(K.y,M+30)+4;
+}
+const fd=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+makePDF=async function(){
+  if(!window.jspdf){alertBox("The report tool didn't load. Check your connection and try again.");return}
+  const list=realList();if(!list.length)return;
+  const K=pdfKit(),{doc,M,W}=K,st=diaryStats(list),child=state.child.trim(),friend=state.kid.trim()||"their friend",ex=list.some(x=>x.ex);
+  await header(K,"Feelings report",[`${child?child+"'s":"A child's"} feelings, shown through ${friend}`,`${fd(new Date(list[0].t))} to ${fd(new Date(list[list.length-1].t))}  ·  ${list.length} entries  ·  made ${fd(new Date())}`]);
+  if(ex)K.p("This report uses example entries, not real ones.",{bold:true,c:[194,69,47],after:4});
+  K.box(insightText(st));
+  K.h("How often each feeling came up");K.y+=2;const max=st.cnt[st.top[0]];
+  st.top.forEach(f=>{K.need(7);doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...K.ink);doc.text(FEEL[f][0],M,K.y+3.5);
+    doc.setFillColor(...rgb(FEEL[f][1]));doc.roundedRect(M+30,K.y,Math.max(3,(W-2*M-45)*st.cnt[f]/max),4.5,1.5,1.5,"F");doc.text(String(st.cnt[f]),W-M,K.y+3.5,{align:"right"});K.y+=7});
+  K.y+=4;
+  const two=(lt,lo,rt,ro)=>{const y0=K.y;K.need(30);const col=(t,rows,x)=>{let y=K.y;doc.setFont("helvetica","bold");doc.setFontSize(12);doc.setTextColor(...K.ink);doc.text(t,x,y);y+=6;doc.setFont("helvetica","normal");doc.setFontSize(10);
+      if(!rows.length){doc.setTextColor(...K.mut);doc.text("Not recorded yet",x,y);return y+6}rows.forEach(([a,b])=>{doc.text(a,x,y);doc.text(String(b),x+72,y,{align:"right"});y+=5.4});return y};
+    K.y=Math.max(col(lt,lo,M),col(rt,ro,W/2+4))+6};
+  const rows=(o,lab)=>Object.keys(o).sort((a,b)=>o[b]-o[a]).map(k=>[lab(k),o[k]]);
+  two("Where in the body",rows(st.where,k=>k),"Senses and needs",rows(st.needs,k=>NI(k)[1]));
+  two("What was happening",rows(st.scene,k=>sceneLabel(k)).slice(0,8),"Where they were",rows(st.place,k=>PLACES[k]));
+  K.h("What was tried, and did it help?");K.y+=1;
+  const hk=Object.keys(st.help).sort((a,b)=>st.help[b].n-st.help[a].n);
+  if(!hk.length)K.p("Nothing recorded yet.",{c:K.mut});else{
+    const cx=[M,M+70,M+95,M+120,M+145];doc.setFontSize(9);doc.setTextColor(...K.mut);["","TRIED","HELPED","A BIT","DIDN'T"].forEach((t,i)=>doc.text(t,cx[i],K.y));K.y+=5;
+    hk.forEach(h=>{K.need(6);const r=st.help[h];doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...K.ink);[HL(h),r.n,r.yes,r.bit,r.no].forEach((t,i)=>doc.text(String(t),cx[i],K.y));K.y+=5.4});K.y+=4}
+  // child's voice
+  doc.addPage();K.y=M;K.h("All about me, in my own words",17);K.y+=1;
+  K.p("These sentences are put together from the feelings, body signs and situations the child chose themselves in the app. They may help with the child's views section of an EHCP (Section A) or a one-page profile.",{c:K.mut,size:9.5,after:5});
+  aboutMe(list).forEach(t=>K.p(t,{size:13,lh:6.4,after:3.5}));
+  // entries
+  K.y+=4;K.h("Every entry");K.y+=1;
+  list.slice().reverse().forEach(x=>{const d=new Date(x.t);
+    const head=`${d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})} ${d.toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit"})}  ·  ${FEEL[x.f][0]}`;
+    const bits=[];if(x.place)bits.push(PLACES[x.place]);if(x.where&&x.where.length)bits.push("felt in "+x.where.join(", "));if(x.scene)bits.push(lc(sceneLabel(x.scene)));if(x.needs&&x.needs.length)bits.push(x.needs.map(k=>NI(k)[1].toLowerCase()).join(", "));
+    if(x.help&&x.help.length)bits.push("tried: "+x.help.map(k=>HL(k).toLowerCase()).join(", ")+(x.worked?` (helped: ${WORKED[x.worked].toLowerCase()})`:""));
+    K.need(14);doc.setFillColor(...rgb(FEEL[x.f][1]));doc.circle(M+1.5,K.y-1.3,1.5,"F");K.p(head,{bold:true,x:5,after:.5});
+    if(bits.length)K.p(bits.join("  ·  "),{x:5,c:K.mut,size:9.5,after:x.note?0.5:3});if(x.note)K.p(`Note: ${x.note}`,{x:5,size:9.5,after:3})});
+  K.foot("Recorded by the child with Little Easier Feelings. Kept privately on their device. Not a clinical assessment.");
+  await shareOrSave(doc.output("blob"),`feelings-report-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}-${new Date().toISOString().slice(0,10)}.pdf`,"application/pdf");
+};
+async function makePassport(){
+  if(!window.jspdf){alertBox("The report tool didn't load. Check your connection and try again.");return}
+  const list=realList(),K=pdfKit(),{doc,M,W}=K,st=diaryStats(list),child=state.child.trim(),friend=state.kid.trim();
+  await header(K,`What helps me`,[child?`All about ${child}`:"A one-page profile",`Made ${fd(new Date())} from ${list.length} feelings entries${list.some(x=>x.ex)?" (examples)":""}`]);
+  const sec=(t,items,empty)=>{K.y+=2;K.h(t,14);K.y+=1;if(!items.length){K.p(empty,{c:K.mut});return}items.forEach(i=>K.p("•  "+i,{size:11.5,lh:5.6,after:2}))};
+  sec("Feelings I have a lot",st.top.slice(0,4).map(f=>{const p=st.per(f);return `I often feel ${FEEL[f][0]}.${p.where?` You might notice it in my ${p.where}.`:""}`}),"Not enough entries yet.");
+  const hard=Object.keys(st.scene).sort((a,b)=>st.scene[b]-st.scene[a]).filter(k=>CHILDSCENE[k]&&!["play","kind","fun","did"].includes(k)).slice(0,4).map(k=>`When ${CHILDSCENE[k]}.`)
+    .concat(Object.keys(st.needs).sort((a,b)=>st.needs[b]-st.needs[a]).map(k=>CHILDNEED[k]));
+  sec("Things that can be hard for me",hard,"Not recorded yet.");
+  const good=Object.keys(st.help).filter(h=>st.help[h].yes+st.help[h].bit>=st.help[h].no).sort((a,b)=>(st.help[b].yes*2+st.help[b].bit)-(st.help[a].yes*2+st.help[a].bit)).map(h=>`${HL(h)}.`);
+  sec("What helps me",good,"Not recorded yet.");
+  const bad=Object.keys(st.help).filter(h=>st.help[h].no>st.help[h].yes+st.help[h].bit).map(h=>`${HL(h)} does not always help.`);
+  if(bad.length)sec("What doesn't help so much",bad,"");
+  sec("Please remember",[`I might not be able to tell you how I feel. ${friend?`Showing my friend ${friend}'s face`:"Showing a face"} can help me.`,"Give me time to answer. Pictures can be easier than words.","There are no wrong answers about how I feel."],"");
+  K.foot("Made with Little Easier Feelings. Kept privately on the child's device.");
+  await shareOrSave(doc.output("blob"),`what-helps-me-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}.pdf`,"application/pdf");
+}
+$("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-a=passport]");if(!t)return;t.textContent="Making…";makePassport().finally(()=>{t.textContent="What helps me"})});
+/* ---------- v3 stage 4: grown-ups area, more than one child, low-demand mode ---------- */
+const saveProfiles=()=>{try{localStorage.setItem("le-profiles",JSON.stringify(PROFILES));localStorage.setItem("le-active",PID)}catch(e){}};
+function syncProfile(){const p=PROFILES.find(x=>x.id===PID);if(p){p.child=state.child.trim();p.kid=state.kid.trim();saveProfiles()}}
+syncProfile();
+$("nameform").addEventListener("submit",()=>setTimeout(syncProfile,0));
+function applyLow(){document.body.classList.toggle("lowdemand",!!state.lowDemand)}
+const _sent4=sentence;
+sentence=function(){const s=_sent4();if(state.lowDemand&&s.f&&!state.needs.length&&!s.where)s.html=s.html.replace(/<small>.*<\/small>$/,"");return s};
+let gArm=null;
+function renderGrown(){
+  const b=$("grownbody");
+  b.innerHTML=`<h2>For grown-ups</h2>
+  <div class="gsec"><h3>Children</h3>${PROFILES.map(p=>`<div class="kid"><span>${esc(p.child||"Unnamed child")}<small>${p.kid?"Friend: "+esc(p.kid):"No friend name yet"}</small></span>${p.id===PID?'<span class="tag">Using now</span>':`<button class="mini" data-sw="${p.id}">Switch</button>`}${PROFILES.length>1?`<button class="mini del" data-rm="${p.id}">${gArm===p.id?"Tap again":"Remove"}</button>`:""}</div>`).join("")}
+    <button class="go ghostbtn small" data-g="add">Add another child</button>
+    <p style="color:var(--muted);font-size:13px">Each child has their own friend, diary and reports.</p></div>
+  <div class="gsec"><h3>Low-demand mode</h3>
+    <label class="switch" for="lowd">Fewer questions and prompts<input type="checkbox" id="lowd" ${state.lowDemand?"checked":""}></label>
+    <p style="color:var(--muted);font-size:13px">For children who find questions hard, such as those with a PDA profile. Hides "Do you feel…?" and the Not sure button, so it's just play.</p></div>
+  <div class="gsec"><h3>Keep the diary safe</h3>
+    <p>Everything stays on this device. Nothing is sent anywhere unless you share it.</p>
+    <p><b>Add this to your Home Screen</b> so it works like an app and the diary is kept more safely. On iPhone, tap <b>Share</b>, then <b>Add to Home Screen</b>.</p>
+    <p>iPhones can clear website data that hasn't been used for a while, and a new phone starts empty. <b>Back up now and then.</b></p>
+    <div class="btnrow"><button class="go small" data-g="backup">Back up diary</button><button class="go ghostbtn small" data-g="restore">Restore backup</button></div><input type="file" id="grestore" accept=".json,application/json" hidden></div>
+  <div class="gsec"><h3>Using the reports</h3><ul>
+    <li><b>Feelings report:</b> for SENCO meetings, annual reviews and EHCP needs assessments. It shows patterns, triggers and what has helped.</li>
+    <li><b>All about me</b> (page 2 of the report): the child's own views, in their words. Useful for Section A of an EHCP.</li>
+    <li><b>What helps me:</b> a one-page profile for new teachers, TAs, clubs, respite and family.</li></ul>
+    <p style="color:var(--muted);font-size:13px">Little Easier is not a clinical tool. Use it alongside what you and the people who know your child see.</p></div>
+  <div class="gsec"><h3>Free help and advice</h3><ul>
+    <li><b>SENDIASS</b>: free, impartial SEND advice in every council area. Search for your council's name plus "SENDIASS".</li>
+    <li><b>IPSEA</b>: free legal advice on EHCPs and tribunals. <a href="https://www.ipsea.org.uk" target="_blank" rel="noopener">ipsea.org.uk</a>. Call-in line: <span class="sel">0300 222 5899</span> (Fridays, 9:30am to 3pm).</li>
+    <li><b>Contact</b>: for families with disabled children. <a href="https://contact.org.uk" target="_blank" rel="noopener">contact.org.uk</a>. Freephone helpline: <span class="sel">0808 808 3555</span> (Monday to Friday, 9:30am to 5pm).</li></ul></div>
+  <button class="go" data-g="close">Done</button>`;
+}
+$("grownbtn").addEventListener("click",()=>{gArm=null;renderGrown();$("grown").hidden=false});
+$("grownbody").addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.sw){PID=t.dataset.sw;saveProfiles();location.reload();return}
+  if(t.dataset.rm){const id=t.dataset.rm;if(gArm!==id){gArm=id;renderGrown();return}
+    PROFILES=PROFILES.filter(p=>p.id!==id);const suf=id==="p1"?"":"-"+id;try{localStorage.removeItem("le-feelings"+suf);localStorage.removeItem("le-diary"+suf)}catch(e){}
+    if(id===PID){PID=PROFILES[0].id;saveProfiles();location.reload();return}saveProfiles();gArm=null;renderGrown();return}
+  const g=t.dataset.g;
+  if(g==="add"){const id="p"+Date.now().toString(36);PROFILES.push({id});PID=id;saveProfiles();location.reload()}
+  if(g==="backup")backup();
+  if(g==="restore")$("grestore").click();
+  if(g==="close")$("grown").hidden=true;
+});
+$("grownbody").addEventListener("change",e=>{
+  if(e.target.id==="lowd"){state.lowDemand=e.target.checked;save();applyLow();update()}
+  if(e.target.id==="grestore"&&e.target.files[0]){restore(e.target.files[0]);$("grown").hidden=true;renderDiary();$("diary").hidden=false}
+});
+applyLow();update();
+
 </script>
 </body>
 </html>
