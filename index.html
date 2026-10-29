@@ -177,6 +177,14 @@ header{gap:8px}
 .switch input{width:46px;height:26px;accent-color:var(--accent)}
 .sel{user-select:text;-webkit-user-select:text}
 .lowdemand #notsure{display:none}
+.intro .eyebrow{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.intro ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.intro li{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:15px;line-height:1.45;font-weight:600}
+.intro li svg{width:28px;height:28px}
+.intro li b{font-weight:800}
+.nudge{background:#fbf0d6;color:#5b4a1f;border-radius:16px;padding:12px 14px;font-size:14px;font-weight:700;line-height:1.4;display:flex;flex-direction:column;gap:8px}
+.nudge button{align-self:flex-start}
+.calmlink{grid-column:1/-1;font-size:13px;font-weight:800;color:var(--accent);margin:0}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -307,7 +315,7 @@ const PARTS={
   {id:"frown",name:"Frown",svg:`<path d="M-17 8 Q0 -8 17 8" fill="none" ${S} stroke-width="4"/>`,v:{sad:3,cross:1}},
   {id:"lip",name:"Lip wobble",svg:`<path d="M-16 7 Q-8 -3 0 3 Q8 -3 16 7" fill="none" ${S} stroke-width="3.5"/><path d="M-7 10 Q0 14 7 10" fill="none" ${S} stroke-width="2.5"/>`,v:{sad:4,worried:1}},
   {id:"oh",name:"Oh!",svg:`<ellipse rx="8" ry="10" fill="var(--mouth)" ${S} stroke-width="3.5"/>`,v:{surprised:4}},
-  {id:"yawn",name:"Yawn",svg:`<ellipse rx="11" ry="13" fill="var(--mouth)" ${S} stroke-width="3.5"/><ellipse cy="7" rx="6" ry="3.5" fill="var(--tongue)"/><path d="M18 -10 h7 l-7 7 h7 M28 -22 h9 l-9 9 h9" fill="none" ${S} stroke-width="2.5"/>`,v:{tired:5}},
+  {id:"yawn",name:"Yawn",svg:`<ellipse rx="11" ry="13" fill="var(--mouth)" ${S} stroke-width="3.5"/><ellipse cy="7" rx="6" ry="3.5" fill="var(--tongue)"/><path d="M24 -14 h7 l-7 7 h7 M34 -26 h9 l-9 9 h9" fill="none" stroke="#fffdfa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 -14 h7 l-7 7 h7 M34 -26 h9 l-9 9 h9" fill="none" ${S} stroke-width="2.5"/>`,v:{tired:5}},
   {id:"wobble",name:"Wobbly",svg:`<path d="M-18 2 Q-12 -5 -6 2 T6 2 T18 2" fill="none" ${S} stroke-width="3.5"/>`,v:{worried:3,nervous:1}},
   {id:"nervous",name:"Nervous",svg:`<g transform="translate(4 0) rotate(-8)"><rect x="-14" y="-6" width="28" height="12" rx="5" fill="#fff" ${S} stroke-width="3"/><path d="M-14 0 H14 M-5 -6 v12 M4 -6 v12" ${S} stroke-width="1.8"/></g>`,v:{nervous:5}},
   {id:"grr",name:"Grr",svg:`<rect x="-16" y="-6" width="32" height="12" rx="5" fill="#fff" ${S} stroke-width="3"/><path d="M-8 -6 v12 M0 -6 v12 M8 -6 v12" ${S} stroke-width="2"/>`,v:{cross:3,frustrated:1}},
@@ -1052,6 +1060,34 @@ $("grownbody").addEventListener("change",e=>{
   if(e.target.id==="grestore"&&e.target.files[0]){restore(e.target.files[0]);$("grown").hidden=true;renderDiary();$("diary").hidden=false}
 });
 applyLow();update();
+/* ---------- v3 stage 5: first-run privacy note, backup nudge, Calm link ---------- */
+(function(){
+  let seen=false;try{seen=localStorage.getItem("le-intro-seen")==="1"}catch(e){}
+  const sh=document.createElement("div");sh.className="sheet";sh.id="intro";sh.hidden=seen;
+  const ic=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="#8d76b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  sh.innerHTML=`<div class="card intro"><span class="eyebrow">For grown-ups</span><h2>Before you start</h2><ul>
+    <li>${ic('<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/>')}<span><b>Everything stays on this phone.</b> No account, no ads, and nothing is sent anywhere. We can't see it, and nobody else can unless you share it.</span></li>
+    <li>${ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}<span><b>If you delete this, clear your browser data or change phone, the diary is gone for good.</b> We can't get it back, because we never have it.</span></li>
+    <li>${ic('<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>')}<span><b>Back up now and then.</b> Tap the people button at the top, then <b>Back up diary</b>. You can also download a PDF report any time.</span></li>
+    <li>${ic('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>')}<span><b>Add it to your Home Screen</b> for the safest storage. On iPhone, tap Share, then Add to Home Screen.</span></li></ul>
+    <button class="go" id="introok" type="button">Got it</button></div>`;
+  document.body.appendChild(sh);
+  $("introok").addEventListener("click",()=>{try{localStorage.setItem("le-intro-seen","1")}catch(e){}sh.hidden=true;if(!state.child&&!state.kid)openSheet()});
+  if(!seen)$("sheet").hidden=true;
+})();
+const BK="le-lastbackup"+PSUF;
+const _backup=backup;
+backup=function(){_backup();try{localStorage.setItem(BK,new Date().toISOString())}catch(e){}};
+const _rd5=renderDiary;
+renderDiary=function(){
+  _rd5();const real=diary.filter(x=>!x.ex).length;let last=null;try{last=localStorage.getItem(BK)}catch(e){}
+  const old=!last||(Date.now()-new Date(last))>30*864e5;
+  if(real>=5&&old){const n=document.createElement("div");n.className="nudge";
+    n.innerHTML=`<span>${last?"It's been a while since your last backup.":"You haven't backed up yet."} There ${real===1?"is":"are"} ${real} entries that only live on this phone.</span><button class="go small" data-a="backup" type="button">Back up now</button>`;
+    const h=$("diarybody").querySelector("h2");h.after(n)}
+};
+const _rt5=renderTray;
+renderTray=function(){_rt5();if(cat==="help"&&state.help.includes("calm")){const a=document.createElement("a");a.className="calmlink";a.href="https://littleeasier.co.uk/calm/";a.target="_blank";a.rel="noopener";a.textContent="Open Little Easier Calm ↗";$("tray").prepend(a)}};
 
 </script>
 </body>
