@@ -212,6 +212,8 @@ a.iconbtn{text-decoration:none}
 .chips.fadeL{-webkit-mask-image:linear-gradient(to right,transparent,#000 18%);mask-image:linear-gradient(to right,transparent,#000 18%)}
 .chips.fadeL.fadeR{-webkit-mask-image:linear-gradient(to right,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(to right,transparent,#000 15%,#000 85%,transparent)}
 @media (prefers-reduced-motion:reduce){.more.nudge{animation:none}}
+.xbtn{position:sticky;top:0;align-self:flex-end;margin:-8px -6px -36px 0;z-index:3;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer;flex:none}
+.xbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
 </head>
@@ -1210,6 +1212,22 @@ applyColor();setChar(state.char);renderChips();renderTray();
 (function(){const b=$("namebtn");b.classList.add("round");
   const set=()=>{b.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M7 3h10v4H7z"/><path d="M7 12h6M7 15h4"/></svg>';const ch=state.child.trim(),n=state.kid.trim();b.setAttribute("aria-label","Names"+(n?`: ${ch?ch+" and ":""}${n}`:""))};
   nameBtn=function(){set()};set();})();
+/* ---------- v3 stage 8: close pop-ups by tapping outside, the ×, or Escape ---------- */
+(function(){
+  const X='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  const closable={diary:"diarybody",grown:"grownbody",cardsheet:null,ns:null,sheet:null};
+  const canClose=id=>id!=="sheet"||!!(state.child.trim()||state.kid.trim());
+  const close=id=>{if(canClose(id))$(id).hidden=true};
+  Object.keys(closable).forEach(id=>{
+    const sh=$(id);if(!sh)return;
+    sh.addEventListener("click",e=>{if(e.target===sh)close(id)});
+  });
+  // a × at the top of the diary and grown-ups, added each time they're drawn
+  const addX=(body,id)=>{const b=$(body);if(b.querySelector(".xbtn"))return;const x=document.createElement("button");x.type="button";x.className="xbtn";x.setAttribute("aria-label","Close");x.innerHTML=X;x.addEventListener("click",()=>close(id));b.prepend(x)};
+  const _rd8=renderDiary;renderDiary=function(){_rd8();addX("diarybody","diary")};
+  const _rg8=renderGrown;renderGrown=function(){_rg8();addX("grownbody","grown")};
+  document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;["cardsheet","diary","grown","ns","sheet"].forEach(id=>{if($(id)&&!$(id).hidden)close(id)})});
+})();
 
 </script>
 </body>
