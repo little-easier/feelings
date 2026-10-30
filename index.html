@@ -216,6 +216,54 @@ a.iconbtn{text-decoration:none}
 .xbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){[class*="f-"] .moWrap{animation:none}}
 </style>
+<style>
+/* ---------- iPad / large screens ---------- */
+@media (min-width:740px) and (min-height:600px){
+  .app{max-width:900px;gap:14px;padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px));padding-block:20px}
+  .brand{font-size:30px}
+  .brand small{font-size:13px}
+  .iconbtn{width:52px;height:52px}
+  .iconbtn svg{width:24px;height:24px}
+  .namebtn{font-size:17px;padding:12px 18px}
+  .namebtn.round{width:52px;height:52px}
+  .stage{border-radius:36px;padding:20px 0 16px}
+  .feel{font-size:26px;padding:12px 20px;border-radius:22px}
+  .feel small{font-size:17px}
+  .moWrap{width:calc(100% - 140px)}
+  .swatches{right:16px;gap:12px;padding:12px 9px}
+  .swatches>*{transform:scale(1.25)}
+  .needbadges{left:16px}
+  .tools{gap:12px}
+  .tool{font-size:16px;padding:12px 20px}
+  .chips{gap:8px;flex-wrap:wrap;overflow:visible}
+  .chip{font-size:17px;padding:10px 18px}
+  .trayhint{font-size:16px}
+  .tray{grid-template-columns:repeat(7,1fr);gap:10px;height:230px}
+  .tray .part{height:86px;border-radius:20px;padding:10px}
+  .tray .opt{height:90px;font-size:13px}
+  .opt .ic{width:42px;height:42px}
+  .part em{font-size:12px;bottom:5px}
+  .more{font-size:15px;padding:7px 14px 7px 16px}
+  .card{max-width:480px;padding:30px 28px;border-radius:32px;gap:16px}
+  .card h2{font-size:32px}
+  .card label{font-size:16px}
+  .card input{font-size:20px;padding:14px 16px}
+  .card p{font-size:16px}
+  .go{font-size:19px;padding:16px}
+  .sheet.bottom{align-items:center}
+}
+/* landscape iPad: big friend on the left, everything you pick on the right */
+@media (min-width:1000px) and (min-height:600px) and (orientation:landscape){
+  .app{max-width:1320px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,1fr);grid-template-rows:auto auto auto minmax(0,1fr);grid-template-areas:"h h" "s c" "s t" "s w";column-gap:24px;row-gap:14px}
+  .app>header{grid-area:h}
+  .stage{grid-area:s;min-height:0}
+  .chips{grid-area:c;align-self:start}
+  .trayhint{grid-area:t}
+  .traywrap{grid-area:w;min-height:0;display:flex;flex-direction:column}
+  .tray{height:auto;flex:1;min-height:0;grid-template-columns:repeat(4,1fr)}
+  .moWrap{width:calc(100% - 120px)}
+}
+</style>
 </head>
 <body>
 
