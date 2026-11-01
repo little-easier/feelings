@@ -63,7 +63,7 @@ header{display:flex;align-items:center;gap:10px}
 .wide{grid-column:1/-1;font-size:13px;color:var(--muted);font-weight:700;margin:0;align-self:center}
 .size3{grid-column:span 4;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .ghost{position:fixed;width:96px;height:72px;pointer-events:none;z-index:50;transform:translate(-50%,-50%) scale(1.15);filter:drop-shadow(0 6px 8px rgba(0,0,0,.18))}
-.ghost.fly{transition:left .2s ease-in,top .2s ease-in,transform .2s ease-in,opacity .2s ease-in}
+.ghost.fly{transition:left .15s ease-in,top .15s ease-in,transform .15s ease-in,opacity .15s ease-in}
 .pop{transform-box:fill-box;transform-origin:center;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pop{0%{transform:scale(.4)}100%{transform:scale(1)}}
 @keyframes breathe{50%{transform:scale(1.015,.99)}}
@@ -269,8 +269,8 @@ a.iconbtn{text-decoration:none}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs id="defs">
-    <filter id="hand" filterUnits="userSpaceOnUse" x="-200" y="-200" width="700" height="800">
-      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/>
+    <filter id="hand" filterUnits="userSpaceOnUse" x="-70" y="-90" width="440" height="560">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="1" seed="4"/>
       <feDisplacementMap in="SourceGraphic" scale="2.6"/>
     </filter>
     <filter id="fabric" x="-8%" y="-8%" width="116%" height="116%">
@@ -529,10 +529,11 @@ let vb=[0,30,300,360],raf=0;
 function fit(){
   const b=$("char").getBBox(),pad=20;
   const x0=Math.min(0,b.x-pad),y0=Math.min(30,b.y-pad),x1=Math.max(300,b.x+b.width+pad),y1=Math.max(390,b.y+b.height+pad);
-  const to=[x0,y0,x1-x0,y1-y0],from=vb.slice(),t0=performance.now();
+  const to=[x0,y0,x1-x0,y1-y0];
   cancelAnimationFrame(raf);
-  const step=t=>{const k=Math.min(1,(t-t0)/350),e=1-Math.pow(1-k,3);vb=from.map((v,i)=>v+(to[i]-v)*e);$("mo").setAttribute("viewBox",vb.join(" "));if(k<1)raf=requestAnimationFrame(step)};
-  raf=requestAnimationFrame(step);
+  // only redraw when the framing really changes: the stitched fabric filter is costly to repaint every frame
+  if(to.every((v,i)=>Math.abs(v-vb[i])<2))return;
+  vb=to;$("mo").setAttribute("viewBox",vb.join(" "));
 }
 
 function place(slot,id){
@@ -580,7 +581,7 @@ $("tray").addEventListener("click",e=>{
   g.style.left=(br.left+br.width/2)+"px";g.style.top=(br.top+br.height/2)+"px";document.body.appendChild(g);
   const ctm=$("slot-"+slot).getScreenCTM();
   requestAnimationFrame(()=>{g.classList.add("fly");g.style.left=ctm.e+"px";g.style.top=ctm.f+"px";g.style.transform="translate(-50%,-50%) scale(.8)";g.style.opacity="0"});
-  setTimeout(()=>{g.remove();place(slot,id)},210);
+  setTimeout(()=>{g.remove();place(slot,id)},150);
 });
 
 $("clear").addEventListener("click",()=>{["eyes","brows","mouth"].forEach(k=>{state[k]=null;drawSlot(k)});state.size=1;state.also=null;state.body=[];state.help=[];save();update();renderTray();fit()});
@@ -760,7 +761,7 @@ function renderDiary(){
 $("diarybody").addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
   if(t.dataset.a==="close")$("diary").hidden=true;
   if(t.dataset.a==="clearex"){diary=diary.filter(x=>!x.ex);saveDiary();renderDiary()}
-  if(t.dataset.a==="pdf"){t.textContent="Making report…";makePDF().finally(()=>{t.textContent="Download PDF report"})}});
+  if(t.dataset.a==="pdf"){t.style.minWidth=t.offsetWidth+"px";t.textContent="Making report…";makePDF().finally(()=>{t.textContent="Download PDF report";t.style.minWidth=""})}});
 $("diarybtn").addEventListener("click",()=>{renderDiary();$("diary").hidden=false});
 $("save").addEventListener("click",()=>{
   const f=feeling();if(!f)return;
@@ -1087,7 +1088,7 @@ async function makePassport(){
   K.foot("Made with Little Easier Feelings. Kept privately on the child's device.");
   await shareOrSave(doc.output("blob"),`what-helps-me-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}.pdf`,"application/pdf");
 }
-$("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-a=passport]");if(!t)return;t.textContent="Making…";makePassport().finally(()=>{t.textContent="What helps me"})});
+$("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-a=passport]");if(!t)return;t.style.minWidth=t.offsetWidth+"px";t.textContent="Making…";makePassport().finally(()=>{t.textContent="What helps me";t.style.minWidth=""})});
 /* ---------- v3 stage 4: grown-ups area, more than one child, low-demand mode ---------- */
 const saveProfiles=()=>{try{localStorage.setItem("le-profiles",JSON.stringify(PROFILES));localStorage.setItem("le-active",PID)}catch(e){}};
 function syncProfile(){const p=PROFILES.find(x=>x.id===PID);if(p){p.child=state.child.trim();p.kid=state.kid.trim();saveProfiles()}}
