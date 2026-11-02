@@ -1109,8 +1109,8 @@ function renderGrown(){
     <p style="color:var(--muted);font-size:13px">For children who find questions hard, such as those with a PDA profile. Hides "Do you feel…?" and the Not sure button, so it's just play.</p></div>
   <div class="gsec"><h3>Keep the diary safe</h3>
     <p>Everything stays on this device. Nothing is sent anywhere unless you share it.</p>
-    <p><b>Add this to your Home Screen</b> so it works like an app and the diary is kept more safely. On iPhone, tap <b>Share</b>, then <b>Add to Home Screen</b>.</p>
-    <p>iPhones can clear website data that hasn't been used for a while, and a new phone starts empty. <b>Back up now and then.</b></p>
+    ${window.LittleEasierApp?`<p>A new phone or tablet starts empty, and deleting the app deletes the diary. <b>Back up now and then.</b></p>`:`<p><b>Add this to your Home Screen</b> so it works like an app and the diary is kept more safely. On iPhone, tap <b>Share</b>, then <b>Add to Home Screen</b>.</p>
+    <p>iPhones can clear website data that hasn't been used for a while, and a new phone starts empty. <b>Back up now and then.</b></p>`}
     <div class="btnrow"><button class="go small" data-g="backup">Back up diary</button><button class="go ghostbtn small" data-g="restore">Restore backup</button></div><input type="file" id="grestore" accept=".json,application/json" hidden></div>
   <div class="gsec"><h3>Using the reports</h3><ul>
     <li><b>Feelings report:</b> for SENCO meetings, annual reviews and EHCP needs assessments. It shows patterns, triggers and what has helped.</li>
@@ -1148,9 +1148,9 @@ applyLow();update();
   const ic=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="#8d76b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
   sh.innerHTML=`<div class="card intro"><span class="eyebrow">For grown-ups</span><h2>Before you start</h2><ul>
     <li>${ic('<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/>')}<span><b>Everything stays on this phone.</b> No account, no ads, and nothing is sent anywhere. We can't see it, and nobody else can unless you share it.</span></li>
-    <li>${ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}<span><b>If you delete this, clear your browser data or change phone, the diary is gone for good.</b> We can't get it back, because we never have it.</span></li>
+    <li>${ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}<span><b>If you delete this${window.LittleEasierApp?"":", clear your browser data"} or change phone, the diary is gone for good.</b> We can't get it back, because we never have it.</span></li>
     <li>${ic('<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>')}<span><b>Back up now and then.</b> Tap the people button at the top, then <b>Back up diary</b>. You can also download a PDF report any time.</span></li>
-    <li>${ic('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>')}<span><b>Add it to your Home Screen</b> for the safest storage. On iPhone, tap Share, then Add to Home Screen.</span></li></ul>
+    ${window.LittleEasierApp?"":`<li>${ic('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>')}<span><b>Add it to your Home Screen</b> for the safest storage. On iPhone, tap Share, then Add to Home Screen.</span></li>`}</ul>
     <button class="go" id="introok" type="button">Got it</button></div>`;
   document.body.appendChild(sh);
   $("introok").addEventListener("click",()=>{try{localStorage.setItem("le-intro-seen","1")}catch(e){}sh.hidden=true;if(!state.child&&!state.kid)openSheet()});
