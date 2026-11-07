@@ -277,6 +277,10 @@ a.iconbtn{text-decoration:none}
 .pulse{animation:lepulse 1.6s ease-in-out infinite}
 @keyframes lepulse{0%,100%{box-shadow:0 0 0 0 rgba(141,118,176,.55)}50%{box-shadow:0 0 0 7px rgba(141,118,176,0)}}
 @media (prefers-reduced-motion:reduce){.pulse,.coach{animation:none}}
+/* dark: the part tiles stay light, so the drawn ink faces show */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tray .part{background:#f3eef8;color:#3a3550;border-color:#f3eef8}}
+:root[data-theme="dark"] .tray .part{background:#f3eef8;color:#3a3550;border-color:#f3eef8}
+.lookrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.lookrow .mini{flex:1;padding:9px 10px;font-size:14px}.lookrow .mini.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 .howto .gtext{text-align:left;font-size:16px;line-height:1.5;font-weight:600;color:var(--fg)}
 .howto .gdots{display:flex;gap:6px;justify-content:center}.howto .gdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.howto .gdots i.on{background:var(--accent)}
 @media (min-width:740px) and (min-height:600px){.feel .chg{font-size:13px}.feelw{font-size:19px;padding:16px 8px}.coach{font-size:16px;padding:8px 16px}.howto .gtext{font-size:19px}}
@@ -1243,7 +1247,7 @@ renderTray();
 const SEAM='class="seam"';
 const CHARS={
  manatee:{name:"Manatee",svg:$("bodyart").innerHTML,slots:{}},
- bear:{name:"Bear",slots:{hats:[150,50],neck:[150,214],patch:[184,288]},svg:`<g filter="url(#fabric)">
+ bear:{name:"Bear",slots:{hats:[150,50],neck:[150,238,0.8],patch:[184,288]},svg:`<g filter="url(#fabric)">
   <circle cx="82" cy="70" r="27" fill="var(--skin)"/><path d="M68 72 Q76 52 94 60 Q90 80 72 82 Z" fill="var(--belly)" stroke="none"/>
   <circle cx="218" cy="70" r="27" fill="var(--skin)"/><path d="M232 72 Q224 52 206 60 Q210 80 228 82 Z" fill="var(--belly)" stroke="none"/>
   <path d="M150 186 C212 186 248 236 246 296 C244 338 212 354 150 354 C88 354 56 338 54 296 C52 236 88 186 150 186 Z" fill="var(--skin)"/>
@@ -1279,7 +1283,7 @@ const dark=(h,a)=>{const n=parseInt(h.slice(1),16),f=x=>Math.round(x*(1-a));retu
 if(!CHARS[state.char])state.char="manatee";
 function setChar(id,anim){
   state.char=id;const C=CHARS[id];$("bodyart").innerHTML=C.svg;
-  for(const k in BASESLOT){const p=C.slots[k]||BASESLOT[k];$("slot-"+k).setAttribute("transform",`translate(${p[0]} ${p[1]})`)}
+  for(const k in BASESLOT){const p=C.slots[k]||BASESLOT[k];$("slot-"+k).setAttribute("transform",`translate(${p[0]} ${p[1]})${p[2]?` scale(${p[2]})`:""}`)}
   if(anim){const w=$("moWrap");w.animate([{transform:"scale(.85)",opacity:.4},{transform:"scale(1.04)"},{transform:"scale(1)",opacity:1}],{duration:420,easing:"ease-out"})}
   save();fit();
 }
@@ -1385,7 +1389,7 @@ function pulse(el){document.querySelectorAll(".pulse").forEach(x=>x!==el&&x.clas
 function coach(){
   if(hintsDone||state.lowDemand){co.hidden=true;pulse(null);return}
   const f=feeling();
-  if(!f){co.textContent="Tap a face part below to start";co.hidden=false;pulse(document.querySelector('#chips .chip[data-k="eyes"]'))}
+  if(!f){co.textContent="Tap the eyes, brows or mouth to start";co.hidden=false;pulse(document.querySelector('#chips .chip[data-k="eyes"]'))}
   else{co.textContent="Happy with it? Tap Save feeling";co.hidden=false;pulse($("save"))}
 }
 $("save").addEventListener("click",()=>{if(!feeling())return;hintsDone=true;try{localStorage.setItem(HK,"1")}catch(e){}coach()});
@@ -1423,6 +1427,51 @@ $("grownbody").addEventListener("click",e=>{if(e.target.closest("[data-g=guide]"
 
 PARTS.hats.label="Head";const th=TABS.find(t=>t[0]==="hats");if(th)th[1]="Head";
 ["hats","neck","patch"].forEach(k=>{try{drawSlot(k)}catch(e){}});
+
+/* 9. look: match the device, or always light / always dark (one setting for the whole app) */
+const TK="le-theme";
+function applyTheme(){let t="auto";try{t=localStorage.getItem(TK)||"auto"}catch(e){}if(t==="auto")delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=t;return t}
+applyTheme();
+
+/* 10. gentle sounds: soft taps when building, a little chime when a feeling is saved. 'ambient', so the
+   ring/silent switch silences them and they never interrupt music or take over the lock screen. */
+const SK="le-sound";let sndOn=true;try{sndOn=localStorage.getItem(SK)!=="0"}catch(e){}
+let actx=null;
+function ac(){try{if(!actx){actx=new (window.AudioContext||window.webkitAudioContext)()}if(navigator.audioSession&&navigator.audioSession.type!=="ambient")navigator.audioSession.type="ambient";if(actx.state!=="running"){const r=actx.resume();if(r&&r.catch)r.catch(()=>{})}}catch(e){actx=null}return actx}
+function tone(f,dur,type,vol,delay){const c=ac();if(!c)return;const t=c.currentTime+(delay||0),o=c.createOscillator(),g=c.createGain();
+  o.type=type||"sine";o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+0.05)}
+const SND={
+ tap:()=>tone(880,.06,"sine",.035),
+ part:()=>{tone(523,.1,"triangle",.05);tone(784,.14,"sine",.035,.05)},
+ dress:()=>{tone(659,.09,"triangle",.045);tone(988,.12,"sine",.03,.06)},
+ spot:()=>tone(392,.12,"sine",.05),
+ pick:()=>{tone(698,.12,"sine",.045);tone(1047,.16,"sine",.03,.07)},
+ save:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.42,"sine",.05,i*.1)),
+ yes:()=>{tone(587,.2,"sine",.05);tone(880,.3,"sine",.04,.12)}};
+function play(k){if(sndOn)try{SND[k]()}catch(e){}}
+document.addEventListener("click",e=>{
+  const t=e.target;if(!sndOn)return;
+  if(t.closest("#save")){if(feeling())play("save");return}
+  if(t.closest(".feelw")){play("pick");return}
+  if(t.closest("[data-a=yes]")){play("yes");return}
+  const part=t.closest("#tray .part");if(part){play(PARTS[cat]&&PARTS[cat].dress?"dress":"part");return}
+  if(t.closest("#mo")&&cat==="body"){play("spot");return}
+  if(t.closest(".chip,.choice,.tool,.sw,#swatches button,.namebtn,.iconbtn"))play("tap");
+},true);
+
+/* the grown-ups area gets both settings */
+const _rg=renderGrown;renderGrown=function(){_rg();
+  const low=$("lowd"),sec=low&&low.closest(".gsec");if(!sec)return;const t=applyTheme();
+  sec.insertAdjacentHTML("afterend",`<div class="gsec"><h3>Sounds and look</h3>
+    <label class="switch" for="sndon">Gentle sounds<input type="checkbox" id="sndon" ${sndOn?"checked":""}></label>
+    <p style="color:var(--muted);font-size:13px">Soft taps and a little chime when a feeling is saved. The ring/silent switch turns them off too.</p>
+    <div class="btnrow lookrow" role="group" aria-label="Look">${[["auto","Match device"],["light","Light"],["dark","Dark"]].map(([k,l])=>`<button class="mini${t===k?" on":""}" type="button" data-th="${k}" aria-pressed="${t===k}">${l}</button>`).join("")}</div>
+    <p style="color:var(--muted);font-size:13px">Dark is gentler at bedtime. "Match device" follows the iPad or phone's own setting.</p></div>`);
+  $("sndon").addEventListener("change",e=>{sndOn=e.target.checked;try{localStorage.setItem(SK,sndOn?"1":"0")}catch(_){}if(sndOn)play("pick")});
+};
+$("grownbody").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;try{localStorage.setItem(TK,b.dataset.th)}catch(_){}applyTheme();
+  document.querySelectorAll("[data-th]").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b))})});
 
 renderChips();renderTray();update();fit();
 })();
