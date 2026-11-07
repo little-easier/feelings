@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Feelings">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Little Easier Feelings</title>
+<title>Feelings Friend · Little Easier</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: one-screen app — names, feeling bubble + stitched friend on a mood mat, tabbed tray below. */
@@ -267,6 +267,19 @@ a.iconbtn{text-decoration:none}
   .entry span{font-size:15px}
   .entry .acts small{font-size:14px}
 }
+.feel{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.feel .chg{display:block;margin-top:3px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);opacity:.75}
+.feelgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.feelw{border:2px solid transparent;background:var(--fb);color:var(--fc);border-radius:16px;padding:12px 6px;font-family:var(--display);font-weight:700;font-size:16px;cursor:pointer}
+.feelw.on{border-color:var(--fc)}
+.coach{margin:0 0 6px;font-size:13px;font-weight:800;color:var(--accent);background:#fffdfa;border-radius:999px;padding:6px 12px;box-shadow:0 2px 0 rgba(58,53,80,.08);animation:coachin .5s ease}
+@keyframes coachin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.pulse{animation:lepulse 1.6s ease-in-out infinite}
+@keyframes lepulse{0%,100%{box-shadow:0 0 0 0 rgba(141,118,176,.55)}50%{box-shadow:0 0 0 7px rgba(141,118,176,0)}}
+@media (prefers-reduced-motion:reduce){.pulse,.coach{animation:none}}
+.howto .gtext{text-align:left;font-size:16px;line-height:1.5;font-weight:600;color:var(--fg)}
+.howto .gdots{display:flex;gap:6px;justify-content:center}.howto .gdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.howto .gdots i.on{background:var(--accent)}
+@media (min-width:740px) and (min-height:600px){.feel .chg{font-size:13px}.feelw{font-size:19px;padding:16px 8px}.coach{font-size:16px;padding:8px 16px}.howto .gtext{font-size:19px}}
 /* landscape iPad: big friend on the left, everything you pick on the right */
 @media (min-width:1000px) and (min-height:600px) and (orientation:landscape){
   .app{max-width:1320px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(400px,1fr);grid-template-rows:auto auto auto minmax(0,1fr);grid-template-areas:"h h" "s c" "s t" "s w";column-gap:24px;row-gap:14px}
@@ -299,7 +312,7 @@ a.iconbtn{text-decoration:none}
 
 <div class="app">
   <header>
-    <div class="brand"><small>little easier</small>Feelings</div>
+    <div class="brand"><small>little easier</small>Feelings Friend</div>
     <button class="namebtn" id="namebtn" aria-label="Change names">Names</button>
     <button class="iconbtn" id="grownbtn" aria-label="Grown-ups"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9.5" r="2.4"/><path d="M15.5 14.6A4.5 4.5 0 0 1 21 19"/></svg></button>
     <button class="iconbtn" id="diarybtn" aria-label="Feelings diary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M10 8h5"/></svg></button>
@@ -371,6 +384,7 @@ a.iconbtn{text-decoration:none}
   </div>
 </div>
 
+<script src="gate.js"></script>
 <script src="jspdf.umd.min.js"></script>
 <script>
 // "phone" on a phone, "iPad" on an iPad (iPadOS reports itself as a Mac with touch)
@@ -449,6 +463,20 @@ const PARTS={
   {id:"flowerp",name:"Flower",svg:`${[0,72,144,216,288].map(a=>`<ellipse cy="-8" rx="5.5" ry="7.5" transform="rotate(${a})" fill="#c9b3e8" ${S} stroke-width="2"/>`).join('')}<circle r="5" fill="#f6c94c" ${S} stroke-width="2"/>`}
  ]}
 };
+/* 8. dress-up: glasses, sunglasses and a hearing aid; a sunflower lanyard and a chew necklace; more patches */
+const lens=(fill)=>`<g transform="translate(0 46)"><circle cx="-32" r="17" fill="${fill}" ${S} stroke-width="3.5"/><circle cx="32" r="17" fill="${fill}" ${S} stroke-width="3.5"/><path d="M-15 -3 Q0 -9 15 -3 M-49 -5 L-64 -10 M49 -5 L64 -10" fill="none" ${S} stroke-width="3.5"/></g>`;
+PARTS.hats.items.push(
+ {id:"glasses",name:"Glasses",svg:lens("rgba(255,255,255,.18)")},
+ {id:"shades",name:"Sunglasses",svg:lens("#3a3550")+`<path d="M-42 38 l8 -6 M22 38 l8 -6" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/>`},
+ {id:"aid",name:"Hearing aid",svg:`<g transform="translate(82 38) rotate(12)"><path d="M0 -15 C11 -15 13 2 5 10 L-1 17" fill="none" stroke="#8a6bc0" stroke-width="8" stroke-linecap="round"/><path d="M0 -15 C11 -15 13 2 5 10 L-1 17" fill="none" ${S} stroke-width="2" opacity=".5"/><circle cx="-2" cy="19" r="4.5" fill="#f6c94c" ${S} stroke-width="2"/></g>`});
+const sunflower=`<g transform="translate(0 66)">${[0,45,90,135,180,225,270,315].map(a=>`<ellipse cy="-7" rx="3" ry="5" transform="rotate(${a})" fill="#f6c94c" stroke="#3a3550" stroke-width="1.2"/>`).join("")}<circle r="4.5" fill="#8a5a2e"/></g>`;
+PARTS.neck.items.push(
+ {id:"lanyard",name:"Sunflower lanyard",svg:`<path d="M-46 -8 Q-22 26 -8 50 M46 -8 Q22 26 8 50" fill="none" stroke="#2f8a4e" stroke-width="7" stroke-linecap="round"/>${[[-38,4],[-29,18],[-20,32],[38,4],[29,18],[20,32]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#f6c94c"/>`).join("")}<rect x="-17" y="48" width="34" height="38" rx="6" fill="#fffdfa" ${S} stroke-width="3"/>${sunflower}`},
+ {id:"chew",name:"Chew necklace",svg:`<path d="M-52 -6 Q0 40 52 -6" fill="none" stroke="#3a3550" stroke-width="3"/><path d="M0 14 C10 14 16 22 16 30 C16 40 8 46 0 46 C-8 46 -16 40 -16 30 C-16 22 -10 14 0 14 Z" fill="#6fc6c1" ${S} stroke-width="3"/><circle cx="-5" cy="27" r="2" fill="#fffdfa"/><circle cx="5" cy="33" r="2" fill="#fffdfa"/><circle cx="-2" cy="38" r="2" fill="#fffdfa"/>`});
+PARTS.patch.items.push(
+ {id:"rainbow",name:"Rainbow",svg:`<path d="M-20 12 A20 20 0 0 1 20 12" fill="none" stroke="#e0607e" stroke-width="6"/><path d="M-13 12 A13 13 0 0 1 13 12" fill="none" stroke="#f6c94c" stroke-width="6"/><path d="M-6 12 A6 6 0 0 1 6 12" fill="none" stroke="#6aa6d8" stroke-width="6"/>`},
+ {id:"sun",name:"Sun",svg:`<circle r="9" fill="#f6c94c" ${S} stroke-width="2.5"/><path d="M0 -20 V-14 M0 14 V20 M-20 0 H-14 M14 0 H20 M-14 -14 L-10 -10 M10 10 L14 14 M-14 14 L-10 10 M10 -10 L14 -14" ${S} stroke-width="2.5"/>`},
+ {id:"paw",name:"Paw",svg:`<ellipse cy="6" rx="10" ry="8" fill="#b9adc4" ${S} stroke-width="2.5"/>${[[-12,-6],[-4,-12],[4,-12],[12,-6]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4.2" fill="#b9adc4" ${S} stroke-width="2"/>`).join("")}`});
 const FEEL={happy:["happy","#e08a2e"],excited:["excited","#d9497a"],calm:["calm","#3f9a7c"],proud:["proud","#2f8fa6"],sad:["sad","#4a7fc0"],worried:["worried","#8a6bc0"],nervous:["nervous","#b0702a"],cross:["cross","#d0453a"],frustrated:["frustrated","#c2452f"],surprised:["surprised","#c27b12"],confused:["confused","#7a8f2e"],tired:["tired","#6b7690"],silly:["silly","#c25bb5"]};
 const MOOD={happy:"#fdf1dc",excited:"#fbe3ec",calm:"#e2f3ec",proud:"#ddf1f5",sad:"#e3edf9",worried:"#ece6f7",nervous:"#f8ecdc",cross:"#fbe4df",frustrated:"#fbe1da",surprised:"#fbf0d6",confused:"#eef3dc",tired:"#e9ebf1",silly:"#f6e4f4"};
 const ORDER=["happy","excited","proud","sad","cross","frustrated","worried","nervous","surprised","confused","tired","silly","calm"];
@@ -463,6 +491,16 @@ const HELP=[
  ["calm","Calm app",'<circle cx="-4" cy="4" r="9" fill="#cfe9f5"/><circle cx="10" cy="-8" r="5" fill="#cfe9f5"/><circle cx="-12" cy="-11" r="3" fill="#cfe9f5"/><path d="M-9 0 a5 5 0 0 1 4 -3" fill="none" stroke="#fff"/>'],
  ["snack","Snack or drink",'<path d="M0 -5 C-8 -11 -16 -4 -14 4 C-12 12 -6 14 0 12 C6 14 12 12 14 4 C16 -4 8 -11 0 -5Z" fill="#f08a7a"/><path d="M0 -5 Q1 -11 4 -14" fill="none"/><path d="M3 -10 Q9 -14 12 -9 Q6 -6 3 -10Z" fill="#8fd19a"/>']
 ];
+/* 6. more ways to help: the strategies SEND families actually use (space comes first: for many children a hug is the last thing they want) */
+HELP.splice(0,0,["space","Space on my own",'<path d="M-16 13 L0 -14 L16 13 Z" fill="#cfe9f5"/><path d="M0 -14 V13 M-5 13 L0 3 L5 13" fill="none"/>']);
+HELP.push(
+ ["music","Headphones or music",'<path d="M-13 5 V1 A13 13 0 0 1 13 1 V5" fill="none"/><rect x="-17" y="3" width="8" height="12" rx="3" fill="#8fc7ea"/><rect x="9" y="3" width="8" height="12" rx="3" fill="#8fc7ea"/>'],
+ ["fidget","Fidget toy",'<circle cy="-10" r="6" fill="#f2b64f"/><circle cx="9" cy="5.5" r="6" fill="#f2b64f"/><circle cx="-9" cy="5.5" r="6" fill="#f2b64f"/><circle r="4" fill="#fffdfa"/>'],
+ ["chew","Chew something",'<path d="M-13 -14 Q0 4 13 -14" fill="none"/><rect x="-8" y="0" width="16" height="15" rx="7" fill="#9fd8b8"/><path d="M-3 5 v5 M3 5 v5" fill="none" stroke-width="1.6"/>'],
+ ["outside","Go outside",'<path d="M0 6 V15 M-16 15 H16" fill="none"/><circle cy="-4" r="11" fill="#9fd8b8"/>'],
+ ["fav","My favourite thing",'<path d="M0 -14 L4 -4 L14 -4 L6 3 L9 13 L0 7 L-9 13 L-6 3 L-14 -4 L-4 -4 Z" fill="#f6c94c"/>'],
+ ["comfort","Comfort toy",'<circle cx="-9" cy="-9" r="5" fill="#d9b48a"/><circle cx="9" cy="-9" r="5" fill="#d9b48a"/><circle cy="2" r="12" fill="#d9b48a"/><ellipse cy="6" rx="4.5" ry="3.2" fill="#f7f1e6"/><circle cx="-4.5" cy="0" r="1.6" fill="var(--ink)" stroke="none"/><circle cx="4.5" cy="0" r="1.6" fill="var(--ink)" stroke="none"/>']);
+
 const COLORS={blue:"#7cc3e6",green:"#8fd19a",sage:"#a8bfa0",mustard:"#e8c25a",pink:"#f0a9bd",lilac:"#b9adc4",grey:"#b3b6bd"};
 const TABS=[["eyes","Eyes"],["brows","Brows"],["mouth","Mouth"],["body","Where?",1],["help","What helps?"],["hats","Hats",1],["neck","Neck"],["patch","Patches"]];
 
@@ -841,7 +879,7 @@ async function makePDF(){
     doc.setFont("helvetica","normal");doc.text(wh,cols[2],y);doc.text(hp,cols[3],y);y+=h});
   const n=doc.getNumberOfPages();
   for(let i=1;i<=n;i++){doc.setPage(i);doc.setFontSize(8);doc.setTextColor(...mut);doc.setFont("helvetica","normal");
-    doc.text("Recorded by the child with Little Easier Feelings. Kept privately on their device. Not a clinical assessment.",M,292);doc.text(`${i} / ${n}`,W-M,292,{align:"right"})}
+    doc.text("Recorded by the child with Feelings Friend (Little Easier). Kept privately on their device. Not a clinical assessment.",M,292);doc.text(`${i} / ${n}`,W-M,292,{align:"right"})}
   const fname=`feelings-report-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}-${new Date().toISOString().slice(0,10)}.pdf`;
   const blob=doc.output("blob");
   try{const f=new File([blob],fname,{type:"application/pdf"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e&&e.name==="AbortError")return}
@@ -898,6 +936,13 @@ const NEEDS=[
  ["thirsty","Thirsty","{n} is thirsty.",'<path d="M-9 -12 H9 L6 13 H-6 Z" fill="#fffdfa"/><path d="M-7.5 -2 H7.5 L5.8 11 H-5.8 Z" fill="#8fc7ea" stroke="none"/>'],
  ["hurt","Something hurts","Something hurts.",'<g transform="rotate(-30)"><rect x="-15" y="-6" width="30" height="12" rx="6" fill="#f3d2b0"/><rect x="-5" y="-6" width="10" height="12" fill="#e8b98e" stroke="none"/></g>'],
  ["toilet","Toilet","{n} needs the toilet.",'<rect x="-11" y="-14" width="10" height="13" rx="2" fill="#fffdfa"/><path d="M-13 -1 H12 Q12 9 2 10 L4 14 H-8 L-6 9 Q-13 7 -13 -1 Z" fill="#fffdfa"/>']];
+/* 7. more senses, including the seeking side (needing to move, needing deep pressure) */
+NEEDS.push(
+ ["smell","Smells too strong","Something smells too strong.",'<path d="M-8 13 Q-12 7 -8 1 Q-4 -5 -8 -11 M0 13 Q-4 7 0 1 Q4 -5 0 -11 M8 13 Q4 7 8 1 Q12 -5 8 -11" fill="none" stroke="#7a8f2e"/>'],
+ ["busy","Too busy","There are too many people.",'<circle cx="-10" cy="-3" r="5" fill="#f7a9c0"/><circle cx="10" cy="-3" r="5" fill="#8fc7ea"/><circle cy="-8" r="5" fill="#f6c94c"/><path d="M-17 13 Q-10 4 -3 13 M3 13 Q10 4 17 13 M-7 10 Q0 1 7 10" fill="none"/>'],
+ ["moving","Need to move","{n} needs to move.",'<path d="M-15 9 L-7 -1 L0 7 L9 -5" fill="none" stroke="#2f8fa6"/><path d="M3 -6 L10 -6 L10 1" fill="none" stroke="#2f8fa6"/><path d="M-16 -10 h6 M-14 -5 h5" fill="none" stroke-width="1.6"/>'],
+ ["pressure","Need a squeeze","{n} needs a big squeeze.",'<ellipse rx="7" ry="10" fill="#f7f1e6"/><path d="M-16 -7 Q-11 9 0 11 Q11 9 16 -7" fill="none" stroke="#e0607e" stroke-width="3"/>']);
+
 if(!Array.isArray(state.needs))state.needs=[];
 let lastScene=null;
 TABS.splice(TABS.findIndex(t=>t[0]==="help"),0,["senses","Senses"]);
@@ -1086,7 +1131,7 @@ makePDF=async function(){
     if(x.help&&x.help.length)bits.push("tried: "+x.help.map(k=>HL(k).toLowerCase()).join(", ")+(x.worked?` (helped: ${WORKED[x.worked].toLowerCase()})`:""));
     K.need(14);doc.setFillColor(...rgb(FEEL[x.f][1]));doc.circle(M+1.5,K.y-1.3,1.5,"F");K.p(head,{bold:true,x:5,after:.5});
     if(bits.length)K.p(bits.join("  ·  "),{x:5,c:K.mut,size:9.5,after:x.note?0.5:3});if(x.note)K.p(`Note: ${x.note}`,{x:5,size:9.5,after:3})});
-  K.foot("Recorded by the child with Little Easier Feelings. Kept privately on their device. Not a clinical assessment.");
+  K.foot("Recorded by the child with Feelings Friend (Little Easier). Kept privately on their device. Not a clinical assessment.");
   await shareOrSave(doc.output("blob"),`feelings-report-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}-${new Date().toISOString().slice(0,10)}.pdf`,"application/pdf");
 };
 async function makePassport(){
@@ -1103,7 +1148,7 @@ async function makePassport(){
   const bad=Object.keys(st.help).filter(h=>st.help[h].no>st.help[h].yes+st.help[h].bit).map(h=>`${HL(h)} does not always help.`);
   if(bad.length)sec("What doesn't help so much",bad,"");
   sec("Please remember",[`I might not be able to tell you how I feel. ${friend?`Showing my friend ${friend}'s face`:"Showing a face"} can help me.`,"Give me time to answer. Pictures can be easier than words.","There are no wrong answers about how I feel."],"");
-  K.foot("Made with Little Easier Feelings. Kept privately on the child's device.");
+  K.foot("Made with Feelings Friend (Little Easier). Kept privately on the child's device.");
   await shareOrSave(doc.output("blob"),`what-helps-me-${(child||"child").replace(/[^a-z0-9]+/gi,"-").toLowerCase()}.pdf`,"application/pdf");
 }
 $("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-a=passport]");if(!t)return;t.style.minWidth=t.offsetWidth+"px";t.textContent="Making…";makePassport().finally(()=>{t.textContent="What helps me";t.style.minWidth=""})});
@@ -1118,7 +1163,7 @@ sentence=function(){const s=_sent4();if(state.lowDemand&&s.f&&!state.needs.lengt
 let gArm=null;
 function renderGrown(){
   const b=$("grownbody");
-  b.innerHTML=`<h2>For grown-ups</h2>
+  b.innerHTML=`<h2>For grown-ups</h2><button class="go ghostbtn small" data-g="guide">How it works</button>
   <div class="gsec"><h3>Children</h3>${PROFILES.map(p=>`<div class="kid"><span>${esc(p.child||"Unnamed child")}<small>${p.kid?"Friend: "+esc(p.kid):"No friend name yet"}</small></span>${p.id===PID?'<span class="tag">Using now</span>':`<button class="mini" data-sw="${p.id}">Switch</button>`}${PROFILES.length>1?`<button class="mini del" data-rm="${p.id}">${gArm===p.id?"Tap again":"Remove"}</button>`:""}</div>`).join("")}
     <button class="go ghostbtn small" data-g="add">Add another child</button>
     <p style="color:var(--muted);font-size:13px">Each child has their own friend, diary and reports.</p></div>
@@ -1167,11 +1212,12 @@ applyLow();update();
   sh.innerHTML=`<div class="card intro"><span class="eyebrow">For grown-ups</span><h2>Before you start</h2><ul>
     <li>${ic('<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/>')}<span><b>Everything stays on this ${DEV}.</b> No account, no ads, and nothing is sent anywhere. We can't see it, and nobody else can unless you share it.</span></li>
     <li>${ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}<span><b>If you delete this${window.LittleEasierApp?"":", clear your browser data"} or change ${DEV}, the diary is gone for good.</b> We can't get it back, because we never have it.</span></li>
-    <li>${ic('<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>')}<span><b>Back up now and then.</b> Tap the people button at the top, then <b>Back up diary</b>. You can also download a PDF report any time.</span></li>
+    <li>${ic('<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>')}<span><b>Back up now and then.</b> Tap the people button at the top, then <b>Back up diary</b>. The grown-ups area asks for a number written in words, so it stays with you. You can also download a PDF report any time.</span></li>
     ${window.LittleEasierApp?"":`<li>${ic('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>')}<span><b>Add it to your Home Screen</b> for the safest storage. On iPhone, tap Share, then Add to Home Screen.</span></li>`}</ul>
-    <button class="go" id="introok" type="button">Got it</button></div>`;
+    <div class="row"><button class="go ghostbtn" id="introtour" type="button">Show me around</button><button class="go" id="introok" type="button">Got it</button></div></div>`;
   document.body.appendChild(sh);
   $("introok").addEventListener("click",()=>{try{localStorage.setItem("le-intro-seen","1")}catch(e){}sh.hidden=true;if(!state.child&&!state.kid)openSheet()});
+  $("introtour").addEventListener("click",()=>{try{localStorage.setItem("le-intro-seen","1")}catch(e){}sh.hidden=true;if(window.openGuide)openGuide();if(!state.child&&!state.kid){const g=$("guide");const w=setInterval(()=>{if(g.hidden){clearInterval(w);openSheet()}},400)}});
   if(!seen)$("sheet").hidden=true;
 })();
 const BK="le-backupat"+PSUF,MUTE="le-nomind"+PSUF;
@@ -1296,6 +1342,90 @@ applyColor();setChar(state.char);renderChips();renderTray();
   document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;["cardsheet","diary","grown","ns","sheet"].forEach(id=>{if($(id)&&!$(id).hidden)close(id)})});
 })();
 
+</script>
+<script>
+/* ---------- v3 (Nov 2026): child-led feelings, gentle first-time hints, a grown-ups guide and check,
+   more ways to help, more senses, and dress-up that lets SEND children see themselves ---------- */
+(function(){
+const PS=PSUF;
+
+/* 1. the child has the last word: tap the feeling to choose a different one */
+const _feeling=feeling;
+const faceKey=()=>[state.eyes,state.brows,state.mouth].join("|");
+feeling=function(){if(state.pick&&state.pickFace===faceKey()&&FEEL[state.pick])return state.pick;return _feeling()};
+function setPick(f){previewFeeling(f);state.pick=f;state.pickFace=faceKey();save();update();coach()}
+const pickSheet=document.createElement("div");pickSheet.className="sheet";pickSheet.id="picksheet";pickSheet.hidden=true;
+pickSheet.innerHTML=`<div class="card" id="pickbody"></div>`;document.body.appendChild(pickSheet);
+function openPick(){
+  const n=state.kid.trim()||"your friend",cur=feeling();
+  $("pickbody").innerHTML=`<h2>How does ${esc(n)} feel?</h2><p>Tap the word that fits best.</p>
+  <div class="feelgrid">${ORDER.map(f=>`<button class="feelw${cur===f?" on":""}" data-pf="${f}" style="--fc:${FEEL[f][1]};--fb:${MOOD[f]}">${FEEL[f][0]}</button>`).join("")}</div>
+  <button class="go ghostbtn" data-pa="close">Close</button>`;
+  pickSheet.hidden=false;
+}
+pickSheet.addEventListener("click",e=>{if(e.target===pickSheet){pickSheet.hidden=true;return}const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.pf){setPick(b.dataset.pf);pickSheet.hidden=true;try{if(window.LittleEasierHaptic)LittleEasierHaptic("light")}catch(_){}}
+  if(b.dataset.pa==="close")pickSheet.hidden=true});
+$("feel").setAttribute("role","button");$("feel").setAttribute("tabindex","0");$("feel").setAttribute("aria-label","Choose the feeling");
+$("feel").addEventListener("click",openPick);
+$("feel").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPick()}});
+// "Not sure?" → "Yes!" keeps the feeling the child agreed to
+$("nsbody").addEventListener("click",e=>{const t=e.target.closest("[data-a=yes]");if(!t)return;const f=ns.list[ns.i];if(f){state.pick=f;state.pickFace=faceKey();save();update()}},true);
+
+/* 2. "New face" clears the face, not the friend's clothes */
+$("clear").textContent="New face";
+$("clear").addEventListener("click",()=>{state.pick=null;save();coach()});
+
+/* 3. gentle first-time hints for the child (never in low-demand mode) */
+const HK="le-hints"+PS;
+const tools=document.querySelector(".tools");
+const co=document.createElement("p");co.className="coach";co.id="coach";co.hidden=true;co.setAttribute("aria-live","polite");tools.parentNode.insertBefore(co,tools);
+let hintsDone=false;try{hintsDone=localStorage.getItem(HK)==="1"}catch(e){}
+function pulse(el){document.querySelectorAll(".pulse").forEach(x=>x!==el&&x.classList.remove("pulse"));if(el)el.classList.add("pulse")}
+function coach(){
+  if(hintsDone||state.lowDemand){co.hidden=true;pulse(null);return}
+  const f=feeling();
+  if(!f){co.textContent="Tap a face part below to start";co.hidden=false;pulse(document.querySelector('#chips .chip[data-k="eyes"]'))}
+  else{co.textContent="Happy with it? Tap Save feeling";co.hidden=false;pulse($("save"))}
+}
+$("save").addEventListener("click",()=>{if(!feeling())return;hintsDone=true;try{localStorage.setItem(HK,"1")}catch(e){}coach()});
+const _u=update;update=function(){_u();
+  const f=feeling(),el=$("feel");if(f&&!el.querySelector(".chg"))el.insertAdjacentHTML("beforeend",'<span class="chg" aria-hidden="true">change</span>');
+  coach()};
+const _rc=renderChips;renderChips=function(){_rc();coach()};
+
+/* 4. the grown-ups check, as in Calm Spaces: in front of the grown-ups area, reports, backups and deleting.
+      Once passed it stays open for five minutes. */
+let unlockedAt=0;const unlocked=()=>Date.now()-unlockedAt<5*60e3;
+function guard(box,test){box.addEventListener("click",e=>{if(unlocked()||!window.LEGate)return;const t=e.target.closest("button");if(!t||!test(t))return;
+  e.stopPropagation();e.preventDefault();LEGate.ask(()=>{unlockedAt=Date.now();t.click()})},true)}
+guard(document.querySelector("header"),t=>t.id==="grownbtn");
+guard($("diary"),t=>["pdf","passport","backup","restore"].includes(t.dataset.a)||t.dataset.del!=null);
+
+/* 5. a short guide for grown-ups, from "Before you start" and the grown-ups area */
+const GUIDE=[
+ ["Making a feeling",`Your child gives their friend a face: eyes, brows and a mouth. The friend names the feeling and asks "Do you feel … too?". <b>Tap the feeling word</b> to choose a different one, so your child always has the last word. <b>Not sure?</b> asks two gentle questions about their body and what's happening. <b>New face</b> starts a new feeling and keeps the friend's clothes on.`],
+ ["Where, senses and what helps",`<b>Where?</b> lets your child tap the place on their friend where they feel it. <b>Senses</b> is for things like too loud, too bright or needing to move. <b>What helps?</b> lets them pick what might help, from a hug to space on their own. Dressing up is just for fun.`],
+ ["Saving to the diary",`<b>Save feeling</b> keeps it in the diary (the book button at the top). You can add where you were, what was happening and a note. The feelings card can be saved as a picture. Until the first save, the diary shows <b>example</b> entries so you can see how it works; they go as soon as you save a real one.`],
+ ["Reports",`In the diary, <b>PDF report</b> shows patterns, triggers and what helped, with an <b>All about me</b> page in your child's own words. It's made for SENCO meetings, annual reviews and EHCP needs assessments. <b>What helps me</b> is a one-page profile for new teachers, clubs and respite.`],
+ ["Keeping it safe",`Everything stays on this ${DEV}: no account, and nothing is sent anywhere. That also means deleting the app, or a new ${DEV}, starts empty. In the grown-ups area, tap <b>Back up diary</b> now and then and keep the file somewhere safe, like Files or iCloud Drive. <b>Restore backup</b> brings it all back.`],
+ ["For every child",`<b>Add another child</b> gives each child their own friend, diary and reports. <b>Low-demand mode</b> takes away questions and prompts for children who find them hard, such as those with a PDA profile. The grown-ups area asks you to tap a number written in words, so it stays with the grown-ups.`]];
+const gs=document.createElement("div");gs.className="sheet";gs.id="guide";gs.hidden=true;gs.innerHTML=`<div class="card howto" id="guidebody"></div>`;document.body.appendChild(gs);
+let gi=0;
+function renderGuide(){const [h,t]=GUIDE[gi];
+  $("guidebody").innerHTML=`<span class="eyebrow">How it works · ${gi+1} of ${GUIDE.length}</span><h2>${h}</h2><p class="gtext">${t}</p>
+  <div class="gdots">${GUIDE.map((_,i)=>`<i class="${i===gi?"on":""}"></i>`).join("")}</div>
+  <div class="row">${gi?'<button class="go ghostbtn" data-gd="back">Back</button>':'<button class="go ghostbtn" data-gd="close">Close</button>'}<button class="go" data-gd="${gi<GUIDE.length-1?"next":"close"}">${gi<GUIDE.length-1?"Next":"Done"}</button></div>`}
+window.openGuide=function(){gi=0;renderGuide();gs.hidden=false};
+gs.addEventListener("click",e=>{if(e.target===gs){gs.hidden=true;return}const b=e.target.closest("[data-gd]");if(!b)return;const a=b.dataset.gd;
+  if(a==="next")gi++;if(a==="back")gi--;if(a==="close"){gs.hidden=true;return}renderGuide()});
+$("grownbody").addEventListener("click",e=>{if(e.target.closest("[data-g=guide]")){$("grown").hidden=true;openGuide()}});
+
+PARTS.hats.label="Head";const th=TABS.find(t=>t[0]==="hats");if(th)th[1]="Head";
+["hats","neck","patch"].forEach(k=>{try{drawSlot(k)}catch(e){}});
+
+renderChips();renderTray();update();fit();
+})();
 </script>
 </body>
 </html>
