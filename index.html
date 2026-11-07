@@ -251,6 +251,21 @@ a.iconbtn{text-decoration:none}
   .card p{font-size:16px}
   .go{font-size:19px;padding:16px}
   .sheet.bottom{align-items:center}
+  /* the words inside the cards grow with the card, so nothing reads like a phone in the middle of an iPad */
+  .card{max-width:560px}
+  .intro li{font-size:18px;grid-template-columns:34px 1fr;gap:14px}
+  .intro li svg{width:32px;height:32px}
+  .intro .eyebrow,.step small{font-size:14px}
+  .choice{font-size:17px;padding:16px 14px;border-radius:18px}
+  .choices{gap:10px}
+  .gsec h3{font-size:23px}
+  .gsec p,.gsec li{font-size:17px}
+  .gsec [style*="font-size:13px"]{font-size:15px!important}
+  .kid{font-size:17px;padding:12px 14px}
+  .mini{font-size:15px;padding:7px 14px}
+  .entry{font-size:17px}
+  .entry span{font-size:15px}
+  .entry .acts small{font-size:14px}
 }
 /* landscape iPad: big friend on the left, everything you pick on the right */
 @media (min-width:1000px) and (min-height:600px) and (orientation:landscape){
@@ -350,7 +365,7 @@ a.iconbtn{text-decoration:none}
 <div class="sheet" id="cardsheet" hidden>
   <div class="card">
     <img id="cardimg" alt="Feelings card">
-    <button class="go" id="dl" type="button">Save to phone</button>
+    <button class="go" id="dl" type="button">Save to device</button>
     <p>Or press and hold the card to save it.</p>
     <button class="tool" id="closecard" type="button" style="align-self:center">Done</button>
   </div>
@@ -358,6 +373,9 @@ a.iconbtn{text-decoration:none}
 
 <script src="jspdf.umd.min.js"></script>
 <script>
+// "phone" on a phone, "iPad" on an iPad (iPadOS reports itself as a Mac with touch)
+const DEV=/iPad/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1)?"iPad":/iPhone|Android/.test(navigator.userAgent)?"phone":"device";
+try{document.getElementById("dl").textContent="Save to "+DEV}catch(e){}
 let PROFILES=[],PID="p1";
 try{PROFILES=JSON.parse(localStorage.getItem("le-profiles")||"[]");PID=localStorage.getItem("le-active")||"p1"}catch(e){}
 if(!PROFILES.length)PROFILES=[{id:"p1"}];if(!PROFILES.find(p=>p.id===PID))PID=PROFILES[0].id;
@@ -1147,8 +1165,8 @@ applyLow();update();
   const sh=document.createElement("div");sh.className="sheet";sh.id="intro";sh.hidden=seen;
   const ic=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="#8d76b0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
   sh.innerHTML=`<div class="card intro"><span class="eyebrow">For grown-ups</span><h2>Before you start</h2><ul>
-    <li>${ic('<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/>')}<span><b>Everything stays on this phone.</b> No account, no ads, and nothing is sent anywhere. We can't see it, and nobody else can unless you share it.</span></li>
-    <li>${ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}<span><b>If you delete this${window.LittleEasierApp?"":", clear your browser data"} or change phone, the diary is gone for good.</b> We can't get it back, because we never have it.</span></li>
+    <li>${ic('<rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M11 18h2"/>')}<span><b>Everything stays on this ${DEV}.</b> No account, no ads, and nothing is sent anywhere. We can't see it, and nobody else can unless you share it.</span></li>
+    <li>${ic('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}<span><b>If you delete this${window.LittleEasierApp?"":", clear your browser data"} or change ${DEV}, the diary is gone for good.</b> We can't get it back, because we never have it.</span></li>
     <li>${ic('<path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>')}<span><b>Back up now and then.</b> Tap the people button at the top, then <b>Back up diary</b>. You can also download a PDF report any time.</span></li>
     ${window.LittleEasierApp?"":`<li>${ic('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>')}<span><b>Add it to your Home Screen</b> for the safest storage. On iPhone, tap Share, then Add to Home Screen.</span></li>`}</ul>
     <button class="go" id="introok" type="button">Got it</button></div>`;
@@ -1166,7 +1184,7 @@ renderDiary=function(){
   _rd5();let base=0,mute=false;try{base=+(localStorage.getItem(BK)||0);mute=localStorage.getItem(MUTE)==="1"}catch(e){}
   const fresh=realCount()-base;if(mute||fresh<5)return;
   const n=document.createElement("div");n.className="nudge";
-  n.innerHTML=`<span><b>${fresh} new entries since your last backup.</b> We're showing this because we care about your diary. It only lives on this phone, and if it's lost, nobody can get it back.</span><div class="row"><button class="go small" data-a="backup" type="button">Back up now</button><button class="go ghostbtn small" data-n="later" type="button">Later</button></div><button class="mini" data-n="mute" type="button" style="align-self:center">Don't remind me again</button>`;
+  n.innerHTML=`<span><b>${fresh} new entries since your last backup.</b> We're showing this because we care about your diary. It only lives on this ${DEV}, and if it's lost, nobody can get it back.</span><div class="row"><button class="go small" data-a="backup" type="button">Back up now</button><button class="go ghostbtn small" data-n="later" type="button">Later</button></div><button class="mini" data-n="mute" type="button" style="align-self:center">Don't remind me again</button>`;
   $("diarybody").querySelector("h2").after(n);
 };
 $("diarybody").addEventListener("click",e=>{const t=e.target.closest("[data-n]");if(!t)return;
