@@ -699,7 +699,7 @@ $("save").addEventListener("click",async()=>{
   const FH=y+110;x.font="700 28px ui-rounded, 'SF Pro Rounded', Nunito, sans-serif";x.fillStyle="#a59fb4";
   const d=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
   x.fillText(`${state.child.trim()?state.child.trim()+" · ":""}${d}`,110,FH-60);
-  x.textAlign="right";x.fillText("little easier · feelings",W-110,FH-60);
+  x.textAlign="right";x.fillText("feelings friend · little easier",W-110,FH-60);
   const out=document.createElement("canvas");out.width=W;out.height=FH;out.getContext("2d").drawImage(cv,0,0);
   lastCard=out;try{$("cardimg").src=out.toDataURL("image/png")}catch(e){$("cardimg").alt="Sorry, the card could not be made on this device."}
   $("cardsheet").hidden=false;
@@ -846,7 +846,7 @@ async function makePDF(){
   const list=diary.slice().sort((a,b)=>a.t<b.t?-1:1);
   const d0=new Date(list[0].t),d1=new Date(list[list.length-1].t),fd=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
   let y=M;
-  doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...mut);doc.text("LITTLE EASIER · FEELINGS",M,y);
+  doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...mut);doc.text("FEELINGS FRIEND · LITTLE EASIER",M,y);
   y+=9;doc.setFontSize(22);doc.setTextColor(...ink);doc.text("Feelings report",M,y);
   y+=8;doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(...mut);
   doc.text(`${child?child+"'s":"A child's"} feelings, shown through ${friend}`,M,y);
@@ -1070,7 +1070,7 @@ function restore(file){
 })();
 /* ---------- v3 stage 3: reports in the child's voice ---------- */
 const CHILDSCENE={change:"plans change",new:"something new happens",no:"someone says no",lost:"something breaks or gets lost",waiting:"I have to wait",fun:"something fun is coming",did:"I do something hard",loud:"it is too loud or busy",alone:"I am on my own",play:"I am playing",bed:"it is bedtime",scary:"something scary happens",crowd:"there are lots of people",noone:"no one plays with me",looked:"people look at me",nothing:"there is nothing to do",kind:"someone is kind to me"};
-const CHILDNEED={loud:"Loud noises can be too much for me.",bright:"Bright lights can be too much for me.",itchy:"Some things feel itchy on my body.",hot:"I can get too hot.",cold:"I can get too cold.",hungry:"Sometimes I am hungry and need food.",thirsty:"Sometimes I am thirsty and need a drink.",hurt:"Sometimes something hurts.",toilet:"Sometimes I need the toilet."};
+const CHILDNEED={loud:"Loud noises can be too much for me.",bright:"Bright lights can be too much for me.",itchy:"Some things feel itchy on my body.",hot:"I can get too hot.",cold:"I can get too cold.",hungry:"Sometimes I am hungry and need food.",thirsty:"Sometimes I am thirsty and need a drink.",hurt:"Sometimes something hurts.",toilet:"Sometimes I need the toilet.",smell:"Strong smells can be too much for me.",busy:"Busy places with lots of people can be too much for me.",moving:"Sometimes I need to move my body.",pressure:"Sometimes a big squeeze helps my body feel calm."};
 const HL=k=>HELP.find(h=>h[0]===k)[1];
 function realList(){return diary.slice().sort((a,b)=>a.t<b.t?-1:1)}
 function aboutMe(list){
@@ -1080,7 +1080,7 @@ function aboutMe(list){
     if(p.where)t+=` I feel it in my ${p.where}.`;
     if(p.scene&&CHILDSCENE[p.scene])t+=` This can happen when ${CHILDSCENE[p.scene]}.`;
     if(p.help)t+=` ${HL(p.help)} helps me.`;out.push(t)});
-  Object.keys(st.needs).sort((a,b)=>st.needs[b]-st.needs[a]).forEach(k=>out.push(CHILDNEED[k]));
+  Object.keys(st.needs).sort((a,b)=>st.needs[b]-st.needs[a]).forEach(k=>{if(CHILDNEED[k])out.push(CHILDNEED[k])});
   const notHelp=Object.keys(st.help).filter(h=>st.help[h].no>st.help[h].yes+st.help[h].bit);
   notHelp.forEach(h=>out.push(`${HL(h)} does not always help me.`));
   return out;
@@ -1098,7 +1098,7 @@ function pdfKit(){
   return K;
 }
 async function header(K,title,sub){
-  const {doc,M,W}=K;doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...K.mut);doc.text("LITTLE EASIER · FEELINGS",M,K.y);
+  const {doc,M,W}=K;doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...K.mut);doc.text("FEELINGS FRIEND · LITTLE EASIER",M,K.y);
   K.y+=9;doc.setFontSize(22);doc.setTextColor(...K.ink);doc.text(title,M,K.y);K.y+=7;
   doc.setFont("helvetica","normal");doc.setFontSize(10.5);doc.setTextColor(...K.mut);sub.forEach(s=>{doc.text(s,M,K.y);K.y+=5});
   const fp=await friendPNG();if(fp){const w=28;doc.addImage(fp.d,"PNG",W-M-w,M-4,w,w*fp.r)}
@@ -1149,7 +1149,7 @@ async function makePassport(){
   const sec=(t,items,empty)=>{K.y+=2;K.h(t,14);K.y+=1;if(!items.length){K.p(empty,{c:K.mut});return}items.forEach(i=>K.p("•  "+i,{size:11.5,lh:5.6,after:2}))};
   sec("Feelings I have a lot",st.top.slice(0,4).map(f=>{const p=st.per(f);return `I often feel ${FEEL[f][0]}.${p.where?` You might notice it in my ${p.where}.`:""}`}),"Not enough entries yet.");
   const hard=Object.keys(st.scene).sort((a,b)=>st.scene[b]-st.scene[a]).filter(k=>CHILDSCENE[k]&&!["play","kind","fun","did"].includes(k)).slice(0,4).map(k=>`When ${CHILDSCENE[k]}.`)
-    .concat(Object.keys(st.needs).sort((a,b)=>st.needs[b]-st.needs[a]).map(k=>CHILDNEED[k]));
+    .concat(Object.keys(st.needs).sort((a,b)=>st.needs[b]-st.needs[a]).map(k=>CHILDNEED[k]).filter(Boolean));
   sec("Things that can be hard for me",hard,"Not recorded yet.");
   const good=Object.keys(st.help).filter(h=>st.help[h].yes+st.help[h].bit>=st.help[h].no).sort((a,b)=>(st.help[b].yes*2+st.help[b].bit)-(st.help[a].yes*2+st.help[a].bit)).map(h=>`${HL(h)}.`);
   sec("What helps me",good,"Not recorded yet.");
