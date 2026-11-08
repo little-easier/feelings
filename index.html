@@ -280,6 +280,10 @@ a.iconbtn{text-decoration:none}
 /* dark: the part tiles stay light, so the drawn ink faces show */
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tray .part{background:#f3eef8;color:#3a3550;border-color:#f3eef8}}
 :root[data-theme="dark"] .tray .part{background:#f3eef8;color:#3a3550;border-color:#f3eef8}
+/* "Not sure?": three choices to a row, so each step fits on one screen */
+.step .choices{grid-template-columns:repeat(3,1fr);gap:6px}
+.step .choice{font-size:13px;padding:10px 8px;line-height:1.25;border-radius:14px}
+@media (min-width:740px) and (min-height:600px){#ns .card.step{max-width:760px}.step .choices{gap:10px}.step .choice{font-size:17px;padding:14px 12px}}
 .lookrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.lookrow .mini{flex:1;padding:9px 10px;font-size:14px}.lookrow .mini.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 .howto .gtext{text-align:left;font-size:16px;line-height:1.5;font-weight:600;color:var(--fg)}
 .howto .gdots{display:flex;gap:6px;justify-content:center}.howto .gdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.howto .gdots i.on{background:var(--accent)}
@@ -1472,6 +1476,10 @@ const _rg=renderGrown;renderGrown=function(){_rg();
 };
 $("grownbody").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;try{localStorage.setItem(TK,b.dataset.th)}catch(_){}applyTheme();
   document.querySelectorAll("[data-th]").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b))})});
+
+/* 11. "Not sure?": each new step starts at the top (picking a choice doesn't move the page) */
+let nsStep=-1;const _rn=renderNS;renderNS=function(){_rn();if(ns.step!==nsStep){nsStep=ns.step;$("nsbody").scrollTop=0;$("ns").scrollTop=0}};
+$("notsure").addEventListener("click",()=>{nsStep=-1},true);
 
 renderChips();renderTray();update();fit();
 })();
