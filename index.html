@@ -192,7 +192,7 @@ header{gap:8px}
 .pk.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);background:var(--surface)}
 .brand{font-family:var(--body);line-height:1}
 .brand small{font-size:13px;font-weight:700;letter-spacing:.3px;text-transform:none;color:var(--muted);margin-bottom:2px;display:block}
-.brand{font-size:32px;font-weight:800;color:var(--accent);flex:none;margin-right:auto}
+.brand{font-size:clamp(22px,calc((100vw - 184px) / 8.2),32px);font-weight:800;color:var(--accent);flex:none;margin-right:auto;white-space:nowrap} /* "Feelings Friend" sizes itself to the room beside the buttons */
 header{align-items:flex-start;gap:8px}
 .app{padding-top:20px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
 .namebtn.round{width:40px;height:40px;padding:0;display:grid;place-items:center;margin-left:0}
@@ -269,8 +269,9 @@ a.iconbtn{text-decoration:none}
 }
 .feel{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .feel .chg{display:block;margin-top:3px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);opacity:.75}
-.feelgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.feelw{border:2px solid transparent;background:var(--fb);color:var(--fc);border-radius:16px;padding:12px 6px;font-family:var(--display);font-weight:700;font-size:16px;cursor:pointer}
+.feelgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.feelw{border:2px solid transparent;background:var(--fb);color:var(--fc);border-radius:16px;padding:12px 4px;font-family:var(--display);font-weight:700;font-size:15px;cursor:pointer;min-width:0;overflow-wrap:anywhere}
+@media (max-width:480px){.feelgrid{gap:6px}.feelw{font-size:14px;padding:11px 2px;border-radius:14px}}
 .feelw.on{border-color:var(--fc)}
 .coach{margin:0 0 6px;font-size:13px;font-weight:800;color:var(--accent);background:#fffdfa;border-radius:999px;padding:6px 12px;box-shadow:0 2px 0 rgba(58,53,80,.08);animation:coachin .5s ease}
 @keyframes coachin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -281,7 +282,7 @@ a.iconbtn{text-decoration:none}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tray .part{background:#f3eef8;color:#3a3550;border-color:#f3eef8}}
 :root[data-theme="dark"] .tray .part{background:#f3eef8;color:#3a3550;border-color:#f3eef8}
 /* "Not sure?": three choices to a row, so each step fits on one screen */
-.step .choices{grid-template-columns:repeat(3,1fr);gap:6px}
+.step .choices{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .step .choice{font-size:13px;padding:10px 8px;line-height:1.25;border-radius:14px}
 @media (min-width:740px) and (min-height:600px){#ns .card.step{max-width:760px}.step .choices{gap:10px}.step .choice{font-size:17px;padding:14px 12px}}
 .lookrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.lookrow .mini{flex:1;padding:9px 10px;font-size:14px}.lookrow .mini.on{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -479,8 +480,8 @@ PARTS.hats.items.push(
  {id:"aid",name:"Hearing aid",svg:`<g transform="translate(94 52) rotate(14)"><path d="M-6 -24 C8 -30 20 -20 18 -4 C16 8 10 18 4 24 C0 28 -6 26 -5 20 C-3 10 2 0 -2 -10 C-4 -16 -10 -20 -6 -24 Z" fill="#8a6bc0" ${S} stroke-width="3"/><path d="M-4 -20 C-14 -16 -16 -4 -12 4" fill="none" ${S} stroke-width="3"/><circle cx="-12" cy="8" r="5" fill="#f6c94c" ${S} stroke-width="2.5"/><circle cx="8" cy="-14" r="2.5" fill="#fffdfa" stroke="none"/></g>`});
 const sunflower=`<g transform="translate(0 66)">${[0,45,90,135,180,225,270,315].map(a=>`<ellipse cy="-7" rx="3" ry="5" transform="rotate(${a})" fill="#f6c94c" stroke="#3a3550" stroke-width="1.2"/>`).join("")}<circle r="4.5" fill="#8a5a2e"/></g>`;
 PARTS.neck.items.push(
- {id:"lanyard",name:"Sunflower lanyard",svg:`<path d="M-46 -8 Q-22 26 -8 50 M46 -8 Q22 26 8 50" fill="none" stroke="#2f8a4e" stroke-width="7" stroke-linecap="round"/>${[[-38,4],[-29,18],[-20,32],[38,4],[29,18],[20,32]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#f6c94c"/>`).join("")}<rect x="-17" y="48" width="34" height="38" rx="6" fill="#fffdfa" ${S} stroke-width="3"/>${sunflower}`},
- {id:"chew",name:"Chew necklace",svg:`<path d="M-52 -6 Q0 40 52 -6" fill="none" stroke="#3a3550" stroke-width="3"/><path d="M0 14 C10 14 16 22 16 30 C16 40 8 46 0 46 C-8 46 -16 40 -16 30 C-16 22 -10 14 0 14 Z" fill="#6fc6c1" ${S} stroke-width="3"/><circle cx="-5" cy="27" r="2" fill="#fffdfa"/><circle cx="5" cy="33" r="2" fill="#fffdfa"/><circle cx="-2" cy="38" r="2" fill="#fffdfa"/>`});
+ {id:"lanyard",name:"Lanyard",svg:`<path d="M-46 -8 Q-22 26 -8 50 M46 -8 Q22 26 8 50" fill="none" stroke="#2f8a4e" stroke-width="7" stroke-linecap="round"/>${[[-38,4],[-29,18],[-20,32],[38,4],[29,18],[20,32]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#f6c94c"/>`).join("")}<rect x="-17" y="48" width="34" height="38" rx="6" fill="#fffdfa" ${S} stroke-width="3"/>${sunflower}`},
+ {id:"chew",name:"Chewy",svg:`<path d="M-52 -6 Q0 40 52 -6" fill="none" stroke="#3a3550" stroke-width="3"/><path d="M0 14 C10 14 16 22 16 30 C16 40 8 46 0 46 C-8 46 -16 40 -16 30 C-16 22 -10 14 0 14 Z" fill="#6fc6c1" ${S} stroke-width="3"/><circle cx="-5" cy="27" r="2" fill="#fffdfa"/><circle cx="5" cy="33" r="2" fill="#fffdfa"/><circle cx="-2" cy="38" r="2" fill="#fffdfa"/>`});
 PARTS.patch.items.push(
  {id:"rainbow",name:"Rainbow",svg:`<path d="M-20 12 A20 20 0 0 1 20 12" fill="none" stroke="#e0607e" stroke-width="6"/><path d="M-13 12 A13 13 0 0 1 13 12" fill="none" stroke="#f6c94c" stroke-width="6"/><path d="M-6 12 A6 6 0 0 1 6 12" fill="none" stroke="#6aa6d8" stroke-width="6"/>`},
  {id:"sun",name:"Sun",svg:`<circle r="9" fill="#f6c94c" ${S} stroke-width="2.5"/><path d="M0 -20 V-14 M0 14 V20 M-20 0 H-14 M14 0 H20 M-14 -14 L-10 -10 M10 10 L14 14 M-14 14 L-10 10 M10 -10 L14 -14" ${S} stroke-width="2.5"/>`},
